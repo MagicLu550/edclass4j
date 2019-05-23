@@ -26,12 +26,14 @@ public class Save implements CommandBase {
 
         DB_CONNECT db_connect = (DB_CONNECT) connector;
 
-        File file = new File(args[1]);
+        File file = new File(args[0]);
 
         List<String> informationList = new ArrayList<>();
 
         informationList.add(db_connect.getUserName());
         informationList.add(db_connect.getPassword());
+        informationList.add(db_connect.getDbName());
+        informationList.add(db_connect.getIp());
         informationList.add(db_connect.getPort()+"");
         informationList.add(db_connect.getType().getStart());
         try{

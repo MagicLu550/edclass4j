@@ -47,6 +47,10 @@ public class DB_CONNECT implements Connector{
 
     private DBTypes type;
 
+    private String ip;
+
+    private String dbName;
+
     private DB_CONNECT(){
         yaml = new Yaml();
     }
@@ -62,6 +66,7 @@ public class DB_CONNECT implements Connector{
     public void connect(String ip,String dbName,int port,DBTypes types){
         DBUtils utils = new DBUtils(types,userName,password,dbName,ip,port);
         this.type = types;
+        this.ip = ip;
         try{
             connection = utils.getConnection();
         }catch (Exception e){
@@ -196,5 +201,12 @@ public class DB_CONNECT implements Connector{
     }
     public DBTypes getType(){
         return type;
+    }
+    public String getIp(){
+        return ip;
+    }
+
+    public String getDbName(){
+        return dbName;
     }
 }

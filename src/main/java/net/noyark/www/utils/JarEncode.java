@@ -56,6 +56,7 @@ public class JarEncode {
         commandBaseMap.put("spwd",new SPwd(connector));
         commandBaseMap.put("exit",new Exit());
         commandBaseMap.put("connect",new Connect(connector));
+        commandBaseMap.put("save",new Save(connector));
     }
 
 }

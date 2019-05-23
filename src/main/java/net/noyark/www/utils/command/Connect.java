@@ -6,6 +6,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,7 +28,9 @@ public class Connect implements CommandBase {
             if(args[0].equals("-f")){
                 try{
                     List<String> infor =  FileUtils.readLines(new File(args[1]),"UTF-8");
-                    connect(infor.toArray(new String[infor.size()]));
+                    connector.setUserName(infor.get(0));
+                    connector.setPassword(infor.get(1));
+                    connect(infor.get(3),infor.get(2),infor.get(4),infor.get(5));
                 }catch (IOException e){
                     e.printStackTrace();
                 }

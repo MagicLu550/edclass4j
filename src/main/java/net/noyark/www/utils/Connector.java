@@ -1,6 +1,5 @@
 package net.noyark.www.utils;
 
-
 import java.io.InputStream;
 
 public interface Connector {
