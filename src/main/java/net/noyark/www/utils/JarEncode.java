@@ -24,6 +24,8 @@ import java.util.concurrent.CountDownLatch;
  * reboot会关闭服务器 而且会至多再会启动一次
  *
  * stable 设置表
+ *
+ * ctable会创建标准表
  */
 
 public class JarEncode {
