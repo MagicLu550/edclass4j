@@ -6,12 +6,10 @@ import net.noyark.www.utils.Connector;
  * 设置或者修改用户名
  */
 
-public class SUser implements CommandBase{
+public class SUser extends ConnectorCommand{
 
-    private Connector connector;
-
-    public SUser(Connector connector){
-        this.connector = connector;
+    public SUser(Connector connector) {
+        super(connector);
     }
 
     @Override

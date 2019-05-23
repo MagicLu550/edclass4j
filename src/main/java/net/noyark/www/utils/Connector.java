@@ -77,4 +77,15 @@ public interface Connector {
      * 关闭db服务
      */
     void close();
+
+    /**
+     * 前提连接了数据库
+     * 生成随机序列码，插入数据库
+     */
+    void randomKeys(int count);
+
+    /**
+     * 生成单个随机序列码
+     */
+    void randomKey();
 }

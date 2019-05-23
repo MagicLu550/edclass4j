@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 这个类用于插件调用，连接远端的key服务器
@@ -67,6 +68,7 @@ public class DB_CONNECT implements Connector{
         DBUtils utils = new DBUtils(types,userName,password,dbName,ip,port);
         this.type = types;
         this.ip = ip;
+        this.dbName = dbName;
         try{
             connection = utils.getConnection();
         }catch (Exception e){
@@ -117,12 +119,12 @@ public class DB_CONNECT implements Connector{
      */
     public boolean createKeyTable(String table){
         try{
-            return connection.prepareStatement("CREATE TABLE "+table+"(" +
-                    "id PRIMARY KEY AUTO_INCREMENT," +
-                    "key TEXT UNIQUE," +
+            return connection.createStatement().execute("CREATE TABLE "+table+" (" +
+                    "id INT PRIMARY KEY AUTO_INCREMENT," +
+                    "keyName CHAR(200) UNIQUE," +
                     "ip VARCHAR (50)," +
-                    "port VARCHAR (10)" +
-                    ")").execute();
+                    "port CHAR " +
+                    ")");
         }catch (SQLException e){
             e.printStackTrace();
             return false;
@@ -154,7 +156,8 @@ public class DB_CONNECT implements Connector{
         try{
             Map keyMapping = yaml.load(in);
             String key = keyMapping.get(keyName).toString();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM "+table+" WHERE key = "+key);
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM "+table+" WHERE keyName = ?");
+            statement.setString(1,key);
             ResultSet set = statement.executeQuery();
             boolean found = false;
             while (set.next()){
@@ -162,7 +165,10 @@ public class DB_CONNECT implements Connector{
                 String port = set.getString("port");
                 if((ip == null||"".equals(ip))&&(port==null||"".equals(port))){
                     //如果不存在，则将ip和port插入进去
-                    PreparedStatement insertIp = connection.prepareStatement("INSERT INTO "+table+" (ip,port) VALUES (?,?) WHERE key="+key);
+                    PreparedStatement insertIp = connection.prepareStatement("INSERT INTO "+table+" (ip,port) VALUES (?,?) WHERE keyName=?");
+                    insertIp.setString(1,serverIp);
+                    insertIp.setString(2,serverPort+"");
+                    insertIp.setString(3,key);
                     insertIp.executeUpdate();
                     found = true;
                 }else{
@@ -174,6 +180,30 @@ public class DB_CONNECT implements Connector{
             return found;
         }catch (Exception e){
             throw new ParseException("the connection is wrong",e);
+        }
+    }
+
+    /**
+     * 前提连接了数据库
+     * 生成随机序列码，插入数据库
+     */
+    public void randomKeys(int count){
+        for(int i = 0;i<count;i++){
+            randomKey();
+        }
+    }
+
+    /**
+     * 生成单个随机序列码
+     */
+    public void randomKey(){
+        try{
+            UUID uuid = UUID.randomUUID();
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO "+table+" (id,keyName) VALUES (null,?)");
+            statement.setString(1,uuid.toString());
+            statement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
         }
     }
 
@@ -209,5 +239,9 @@ public class DB_CONNECT implements Connector{
 
     public String getDbName(){
         return dbName;
+    }
+
+    public String getTable() {
+        return table;
     }
 }

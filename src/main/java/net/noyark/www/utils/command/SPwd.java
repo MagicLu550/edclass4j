@@ -6,12 +6,10 @@ import net.noyark.www.utils.Connector;
  * 设置或者修改密码
  */
 
-public class SPwd implements CommandBase {
+public class SPwd extends ConnectorCommand{
 
-    private Connector connector;
-
-    public SPwd(Connector connector){
-        this.connector = connector;
+    public SPwd(Connector connector) {
+        super(connector);
     }
 
     @Override

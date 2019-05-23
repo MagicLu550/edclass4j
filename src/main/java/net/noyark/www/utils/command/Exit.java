@@ -2,7 +2,6 @@ package net.noyark.www.utils.command;
 
 import net.noyark.www.utils.ex.ShutDownException;
 
-import java.util.concurrent.CountDownLatch;
 
 /**
  * 退出程序

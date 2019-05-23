@@ -22,6 +22,8 @@ import java.util.concurrent.CountDownLatch;
  * connect -f fileName 通过保存地址连接
  *
  * reboot会关闭服务器 而且会至多再会启动一次
+ *
+ * stable 设置表
  */
 
 public class JarEncode {
@@ -56,6 +58,9 @@ public class JarEncode {
         commandBaseMap.put("reboot",new Reboot(latch));
         commandBaseMap.put("connect",new Connect(connector));
         commandBaseMap.put("save",new Save(connector));
+        commandBaseMap.put("rkeys",new Random(connector));
+        commandBaseMap.put("stable",new Stable(connector));
+        commandBaseMap.put("ctable",new Ctable(connector));//创建表
     }
 
     public static class CommandThread implements Runnable{

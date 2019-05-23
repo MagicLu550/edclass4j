@@ -12,12 +12,10 @@ import java.util.List;
 /**
  * 将设置的数据库信息保存到持久层
  */
-public class Save implements CommandBase {
+public class Save extends ConnectorCommand {
 
-    private Connector connector;
-
-    public Save(Connector connector){
-        this.connector = connector;
+    public Save(Connector connector) {
+        super(connector);
     }
 
     //save fileName
@@ -36,6 +34,7 @@ public class Save implements CommandBase {
         informationList.add(db_connect.getIp());
         informationList.add(db_connect.getPort()+"");
         informationList.add(db_connect.getType().getStart());
+        informationList.add(db_connect.getTable());
         try{
             FileUtils.writeLines(file,informationList);
         }catch (IOException e){

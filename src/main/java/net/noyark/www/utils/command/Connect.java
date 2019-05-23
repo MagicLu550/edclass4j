@@ -12,12 +12,10 @@ import java.util.List;
  * 该指令连接数据库
  */
 
-public class Connect implements CommandBase {
+public class Connect extends ConnectorCommand{
 
-    private Connector connector;
-
-    public Connect(Connector connector){
-        this.connector = connector;
+    public Connect(Connector connector) {
+        super(connector);
     }
 
     @Override
@@ -30,6 +28,7 @@ public class Connect implements CommandBase {
                     connector.setUserName(infor.get(0));
                     connector.setPassword(infor.get(1));
                     connect(infor.get(3),infor.get(2),infor.get(4),infor.get(5));
+                    connector.setTable(infor.get(6));
                 }catch (IOException e){
                     e.printStackTrace();
                 }
