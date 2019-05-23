@@ -209,7 +209,7 @@ public class DB_CONNECT implements Connector{
                 }
             }
         }
-        return false;
+        return found;
     }
 
     public void close(){
