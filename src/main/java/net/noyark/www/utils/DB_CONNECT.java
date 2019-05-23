@@ -156,28 +156,7 @@ public class DB_CONNECT implements Connector{
         try{
             Map keyMapping = yaml.load(in);
             String key = keyMapping.get(keyName).toString();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM "+table+" WHERE keyName = ?");
-            statement.setString(1,key);
-            ResultSet set = statement.executeQuery();
-            boolean found = false;
-            while (set.next()){
-                String ip = set.getString("ip");
-                String port = set.getString("port");
-                if((ip == null||"".equals(ip))&&(port==null||"".equals(port))){
-                    //如果不存在，则将ip和port插入进去
-                    PreparedStatement insertIp = connection.prepareStatement("INSERT INTO "+table+" (ip,port) VALUES (?,?) WHERE keyName=?");
-                    insertIp.setString(1,serverIp);
-                    insertIp.setString(2,serverPort+"");
-                    insertIp.setString(3,key);
-                    insertIp.executeUpdate();
-                    found = true;
-                }else{
-                    if(serverIp.equals(ip)&&(serverPort+"").equals(port)) {
-                        found = true;//ip port一样，那么该插件已经授权
-                    }
-                }
-            }
-            return found;
+            return compareKey(key,serverIp,serverPort);
         }catch (Exception e){
             throw new ParseException("the connection is wrong",e);
         }
@@ -207,6 +186,31 @@ public class DB_CONNECT implements Connector{
         }
     }
 
+    @Override
+    public boolean compareKey(String key,String serverIp,int serverPort) throws SQLException{
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM "+table+" WHERE keyName = ?");
+        statement.setString(1,key);
+        ResultSet set = statement.executeQuery();
+        boolean found = false;
+        while (set.next()){
+            String ip = set.getString("ip");
+            String port = set.getString("port");
+            if((ip == null||"".equals(ip))&&(port==null||"".equals(port))){
+                //如果不存在，则将ip和port插入进去
+                PreparedStatement insertIp = connection.prepareStatement("INSERT INTO "+table+" (ip,port) VALUES (?,?) WHERE keyName=?");
+                insertIp.setString(1,serverIp);
+                insertIp.setString(2,serverPort+"");
+                insertIp.setString(3,key);
+                insertIp.executeUpdate();
+                found = true;
+            }else{
+                if(serverIp.equals(ip)&&(serverPort+"").equals(port)) {
+                    found = true;//ip port一样，那么该插件已经授权
+                }
+            }
+        }
+        return false;
+    }
 
     public void close(){
         try{

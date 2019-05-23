@@ -63,6 +63,7 @@ public class JarEncode {
         commandBaseMap.put("rkeys",new Random(connector));
         commandBaseMap.put("stable",new Stable(connector));
         commandBaseMap.put("ctable",new Ctable(connector));//创建表
+        commandBaseMap.put("compare",new Compare(connector));
     }
 
     public static class CommandThread implements Runnable{
