@@ -2,6 +2,10 @@ package net.noyark.www.utils.command;
 
 import net.noyark.www.utils.Connector;
 
+/**
+ * 设置或者修改用户名
+ */
+
 public class SUser implements CommandBase{
 
     private Connector connector;

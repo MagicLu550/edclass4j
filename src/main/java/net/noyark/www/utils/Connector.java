@@ -1,6 +1,8 @@
 package net.noyark.www.utils;
 
 
+import java.io.InputStream;
+
 public interface Connector {
 
     /**
@@ -55,7 +57,7 @@ public interface Connector {
     /**
      * 创建表
      */
-    void createKeyTable(String table);
+    boolean createKeyTable(String table);
 
 
     /**
@@ -71,6 +73,7 @@ public interface Connector {
      */
     boolean compareKey(String keyFile,String keyName,String serverIp,int serverPort);
 
+    boolean compareKey(InputStream in, String keyName, String serverIp, int serverPort);
     /**
      * 关闭db服务
      */

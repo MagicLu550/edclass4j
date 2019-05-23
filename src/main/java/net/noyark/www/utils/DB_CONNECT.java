@@ -45,6 +45,8 @@ public class DB_CONNECT implements Connector{
 
     private String table;
 
+    private DBTypes type;
+
     private DB_CONNECT(){
         yaml = new Yaml();
     }
@@ -59,6 +61,7 @@ public class DB_CONNECT implements Connector{
 
     public void connect(String ip,String dbName,int port,DBTypes types){
         DBUtils utils = new DBUtils(types,userName,password,dbName,ip,port);
+        this.type = types;
         try{
             connection = utils.getConnection();
         }catch (Exception e){
@@ -107,9 +110,9 @@ public class DB_CONNECT implements Connector{
     /**
      * 创建表
      */
-    public void createKeyTable(String table){
+    public boolean createKeyTable(String table){
         try{
-            connection.prepareStatement("CREATE TABLE "+table+"(" +
+            return connection.prepareStatement("CREATE TABLE "+table+"(" +
                     "id PRIMARY KEY AUTO_INCREMENT," +
                     "key TEXT UNIQUE," +
                     "ip VARCHAR (50)," +
@@ -117,6 +120,7 @@ public class DB_CONNECT implements Connector{
                     ")").execute();
         }catch (SQLException e){
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -135,7 +139,14 @@ public class DB_CONNECT implements Connector{
      */
     public boolean compareKey(String keyFile,String keyName,String serverIp,int serverPort){
         try{
-            InputStream in = new FileInputStream(keyFile);
+            return compareKey(new FileInputStream(keyFile),keyName,serverIp,serverPort);
+        }catch (IOException e){
+            throw new ParseException("the yaml config is wrong",e);
+        }
+    }
+
+    public boolean compareKey(InputStream in,String keyName,String serverIp,int serverPort){
+        try{
             Map keyMapping = yaml.load(in);
             String key = keyMapping.get(keyName).toString();
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM "+table+" WHERE key = "+key);
@@ -157,10 +168,7 @@ public class DB_CONNECT implements Connector{
             }
             return found;
         }catch (Exception e){
-            if(e instanceof IOException)
-                throw new ParseException("the yaml config is wrong",e);
-            else
-                throw new ParseException("the connection is wrong",e);
+            throw new ParseException("the connection is wrong",e);
         }
     }
 
@@ -174,5 +182,19 @@ public class DB_CONNECT implements Connector{
 
     public static DB_CONNECT getConnector() {
         return connector;
+    }
+
+    public String getUserName(){
+        return userName;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+    public int getPort(){
+        return type.getPort();
+    }
+    public DBTypes getType(){
+        return type;
     }
 }

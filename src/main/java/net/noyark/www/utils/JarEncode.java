@@ -17,6 +17,7 @@ import java.util.Map;
  * connect ip port type
  * connect ip dbName
  * connect ip dbName port type
+ * connect -f fileName 通过保存地址连接
  */
 
 public class JarEncode {
