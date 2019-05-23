@@ -4,15 +4,17 @@ import net.noyark.www.utils.ex.ShutDownException;
 
 import java.util.concurrent.CountDownLatch;
 
-/**
- * 退出程序
- */
+public class Reboot implements CommandBase {
 
-public class Exit implements CommandBase {
+    private CountDownLatch latch;
 
+    public Reboot(CountDownLatch latch) {
+        this.latch = latch;
+    }
 
     @Override
     public Object excute(String[] args) {
+        latch.countDown();
         throw new ShutDownException();
     }
 }
