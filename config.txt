@@ -1,0 +1,7 @@
+root
+85027859
+boot_server
+localhost
+3306
+mysql
+user
