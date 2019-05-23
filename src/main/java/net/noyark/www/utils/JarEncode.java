@@ -64,6 +64,7 @@ public class JarEncode {
         commandBaseMap.put("stable",new Stable(connector));
         commandBaseMap.put("ctable",new Ctable(connector));//创建表
         commandBaseMap.put("compare",new Compare(connector));
+        commandBaseMap.put("cckey",new Cckey());//cckey keyFileName
     }
 
     public static class CommandThread implements Runnable{
