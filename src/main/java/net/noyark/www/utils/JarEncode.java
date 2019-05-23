@@ -65,6 +65,9 @@ public class JarEncode {
         commandBaseMap.put("ctable",new Ctable(connector));//创建表
         commandBaseMap.put("compare",new Compare(connector));
         commandBaseMap.put("cckey",new Cckey());//cckey keyFileName
+        //TODO 明天用我的reflectset库实现全部加密
+        //eclass all
+        commandBaseMap.put("eclass",new Eclass());//eclass keyFileName class1 class2 class3...
     }
 
     public static class CommandThread implements Runnable{
