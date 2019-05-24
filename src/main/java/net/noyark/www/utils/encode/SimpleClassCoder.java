@@ -46,6 +46,7 @@ public class SimpleClassCoder {
         ReflectSet.getReflectSet().load(classpath,this,keyFile,true,mainClass);
     }
 
+    
 
     public static SimpleClassCoder getClassCoder() {
         return classCoder;
