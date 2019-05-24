@@ -34,8 +34,6 @@ public class JarEncode {
 
     public static Map<String, CommandBase> commandBaseMap;
 
-    public static CountDownLatch latch = new CountDownLatch(1);
-
     static {
         commandBaseMap = new HashMap<>();
         connector = DB_CONNECT.getConnector();
@@ -45,19 +43,12 @@ public class JarEncode {
     public static void main(String[] args){
         Message.info("启动PluginEmpowerSystem服务");
         new Thread(new CommandThread()).start();
-        try{
-            latch.await();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        new Thread(new CommandThread()).start();
     }
 
     public static void registerCommand(){
         commandBaseMap.put("suser",new SUser(connector));
         commandBaseMap.put("spwd",new SPwd(connector));
         commandBaseMap.put("exit",new Exit());
-        commandBaseMap.put("reboot",new Reboot(latch));
         commandBaseMap.put("connect",new Connect(connector));
         commandBaseMap.put("save",new Save(connector));
         commandBaseMap.put("rkeys",new Random(connector));
