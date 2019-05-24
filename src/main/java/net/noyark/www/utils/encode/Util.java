@@ -44,6 +44,10 @@ public class Util
         }
     }
 
+    public static File getClassFile(){
+        return new File(getJarInFIle()+"classes");
+    }
+
     public static File getKeyFile(){
         return new File(getJarInFIle()+"/keyfile");
     }
@@ -95,7 +99,7 @@ public class Util
                 return "THIS:在当前的class文件所在地，会被覆盖";
             }else{
                 //输出在out文件
-                return getJarInFIle()+"/out/"+to;
+                return getJarInFIle()+"/"+to;
             }
         }catch (IOException e){
             e.printStackTrace();

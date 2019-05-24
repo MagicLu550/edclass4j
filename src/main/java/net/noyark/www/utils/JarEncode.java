@@ -43,6 +43,7 @@ public class JarEncode {
         registerCommand();
         vars.put("jarin",commandBaseMap.get("jarin").execute(new String[1]).toString());
         vars.put("keyfile",commandBaseMap.get("keyfile").execute(new String[1]).toString());
+        vars.put("gclass",commandBaseMap.get("gclass").execute(new String[1]).toString());
     }
 
     public static void main(String[] args){
@@ -60,18 +61,18 @@ public class JarEncode {
         commandBaseMap.put("stable",new Stable(connector));
         commandBaseMap.put("ctable",new Ctable(connector));//创建表
         commandBaseMap.put("compare",new Compare(connector));
+        commandBaseMap.put("dcclass",new Dcclass(connector));
         commandBaseMap.put("cckey",new Cckey());//cckey keyFileName
-        //TODO 明天用我的reflectset库实现全部加密
-        //eclass all
         commandBaseMap.put("eclass",new Eclass());//eclass keyFileName class1 class2 class3...
         commandBaseMap.put("dclass",new Dclass());
-        commandBaseMap.put("dcclass",new Dcclass(connector));
         commandBaseMap.put("declassall",new DeclassAll());
         commandBaseMap.put("enclassall",new EnclassAll());
         commandBaseMap.put("sppf",new Sppf());
         commandBaseMap.put("keyfile",new KeyFile());
         commandBaseMap.put("jarin",new Jarin());
         commandBaseMap.put("echo",new Echo());
+        commandBaseMap.put("dev",new Dev());//jar
+        commandBaseMap.put("gclass",new Gclass());//get classes
     }
 
     public static class CommandThread implements Runnable{
@@ -85,10 +86,11 @@ public class JarEncode {
                         String value = right_left[1];
                         Set<Map.Entry<String,CommandBase>> set = commandBaseMap.entrySet();
                         //变量指令只支持jarin keyfile的
-
                         value = value
                                 .replace("{jarin}",commandBaseMap.get("jarin").execute(new String[]{}).toString())
-                                .replace("{keyfile}",commandBaseMap.get("keyfile").execute(new String[]{}).toString());
+                                .replace("{keyfile}",commandBaseMap.get("keyfile").execute(new String[]{}).toString())
+                                .replace("{gclass}",commandBaseMap.get("gclass").execute(new String[]{}).toString());
+
                         vars.put(right_left[0].replace("$",""),value);
                     }else{
                         String arg = Message.input();

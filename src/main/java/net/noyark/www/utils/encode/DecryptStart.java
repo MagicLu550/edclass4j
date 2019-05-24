@@ -8,16 +8,20 @@ import java.lang.reflect.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 
+/**
+ * 加密的代码
+ * 流程很简单，通过api生成key，通过key把class文件内容读出来编码再写进去
+ * 之后一个编码的文件就诞生的
+ * 怎么解码，也很简单，把key放进去，然后用定制的classloader把class对象取出，api根据key解密，就ok了
+ *解密考虑问题：就是万一是系统的class，那么分三步走，总有一款适合你
+ */
+
 public class DecryptStart extends ClassLoader
 {
-    // 这些对象在构造函数中设置，以后loadClass()方法将利用它们解密类
-    private SecretKey key;
     private Cipher cipher;
 
 
-    // 构造函数：设置解密所需要的对象
     public DecryptStart(SecretKey key) throws GeneralSecurityException {
-        this.key = key;
         String algorithm = "DES";
         SecureRandom sr = new SecureRandom();
         Message.info("[DecryptStart: creating cipher]");
@@ -25,9 +29,13 @@ public class DecryptStart extends ClassLoader
         cipher.init(Cipher.DECRYPT_MODE, key, sr);
     }
 
-    // main过程：在这里读入密匙，创建DecryptStart的实例，它就是定制ClassLoader。
-    // 设置好ClassLoader以后，用它装入应用实例，
-    // 最后，通过Java Reflection API调用应用实例的main方法
+    /**
+     * 把之前密钥放入，接着解密，通过定制classloader加载类，就ok了
+     * @param args
+     * @param executeMain
+     * @return
+     * @throws Exception
+     */
     public static Class<?> decode(String args[],boolean executeMain) throws Exception {
         String keyFilename = args[0];
         String appName = args[1];
@@ -58,11 +66,9 @@ public class DecryptStart extends ClassLoader
     private static void executeMain(Class<?> clasz,String[] realArgs,String appName,boolean executeMain){
         if(executeMain){
             try{
-                // 最后通过Reflection API调用应用实例
-                // 的main()方法
-
-                // 获取一个对main()的引用
-                String proto[] = new String[1];
+                /*反射调用main方法
+                 *
+                 */
                 Class mainArgs[] = { (new String[1]).getClass() };
                 Method main = clasz.getMethod("main", mainArgs);
 
