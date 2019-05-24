@@ -24,10 +24,10 @@ public class EncryptClasses
 
         // 加密命令行中指定的每一个类
         for (int i=0; i<args.length; ++i) {
-            String filename = args[i];
-            byte classData[] = Util.readFile(filename);  //读入类文件
+            String filename = Util.getClassPath(args[i]);
+            byte classData[] = Util.readFile(filename+".class");  //读入类文件
             byte encryptedClassData[] = ecipher.doFinal(classData);  //加密
-            Util.writeFile(filename, encryptedClassData);  // 保存加密后的内容
+            Util.writeFile(filename+".class", encryptedClassData);  // 保存加密后的内容
             Message.info("Encrypted " + filename);
         }
     }

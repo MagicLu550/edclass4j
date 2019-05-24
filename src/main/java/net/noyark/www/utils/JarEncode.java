@@ -70,6 +70,8 @@ public class JarEncode {
         commandBaseMap.put("eclass",new Eclass());//eclass keyFileName class1 class2 class3...
         commandBaseMap.put("dclass",new Dclass());
         commandBaseMap.put("dcclass",new Dcclass(connector));
+        commandBaseMap.put("declassall",new DeclassAll());
+        commandBaseMap.put("enclassall",new EnclassAll());
     }
 
     public static class CommandThread implements Runnable{

@@ -5,7 +5,6 @@ import net.noyark.www.utils.Message;
 import java.io.*;
 import java.security.*;
 import java.lang.reflect.*;
-import java.util.Properties;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 
@@ -14,6 +13,7 @@ public class DecryptStart extends ClassLoader
     // 这些对象在构造函数中设置，以后loadClass()方法将利用它们解密类
     private SecretKey key;
     private Cipher cipher;
+
 
     // 构造函数：设置解密所需要的对象
     public DecryptStart(SecretKey key) throws GeneralSecurityException {
@@ -48,12 +48,14 @@ public class DecryptStart extends ClassLoader
 
         // 创建应用主类的一个实例，通过ClassLoader装入它
         Message.info("[DecryptStart: loading "+appName+"]");
+
         Class clasz = dr.loadClass(appName);
 
+        executeMain(clasz,realArgs,appName,executeMain);
         return clasz;
     }
 
-    private void excuteMain(Class<?> clasz,String[] realArgs,String appName,boolean executeMain){
+    private static void executeMain(Class<?> clasz,String[] realArgs,String appName,boolean executeMain){
         if(executeMain){
             try{
                 // 最后通过Reflection API调用应用实例
@@ -89,24 +91,8 @@ public class DecryptStart extends ClassLoader
 
             // 下面是定制部分
             try{
-                String filename;
-                Properties properties = new Properties();
-                InputStream in = this.getResourceAsStream("application.properties");
-                if(in!=null){
-                    properties.load(in);
-                    String classpath = properties.getProperty("encode.classpath");
-                    if(classpath == null){
-                        classpath = "target/classes/";
-                    }
-                    String replace = name.replace(".","/");
-                    filename = classpath.endsWith("/")?classpath+replace:classpath+"/"+replace;
-                }else{
-                    filename = "target/classes/"+name.replace(".","/");
-                }
-
+                String filename = Util.getClassPath(name);
                 //读取经过加密的类文件
-
-
                 byte classData[] = Util.readFile(filename+".class");
                 if(classData != null){
                     byte decryptedClassData[] = cipher.doFinal(classData);  //解密
@@ -133,4 +119,6 @@ public class DecryptStart extends ClassLoader
             throw new ClassNotFoundException( gse.toString());
         }
     }
+
+
 }

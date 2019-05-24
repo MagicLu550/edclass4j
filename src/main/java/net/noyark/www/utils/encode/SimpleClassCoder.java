@@ -6,6 +6,11 @@ import net.noyark.www.utils.ex.ParseException;
 
 import java.util.List;
 
+/**
+ * 将加密方法集成在这里
+ * classpath在配置文件指定
+ */
+
 public class SimpleClassCoder {
 
     private static SimpleClassCoder classCoder;
@@ -25,30 +30,34 @@ public class SimpleClassCoder {
         }
     }
 
-    public void decode(String keyFile,String classname,boolean executeMain){
+    public Class<?> decode(String keyFile,String classname,boolean executeMain){
         try{
-            DecryptStart.decode(new String[]{keyFile,classname},executeMain);
+            return DecryptStart.decode(new String[]{keyFile,classname},executeMain);
         }catch (Exception e){
             e.printStackTrace();
             throw new ParseException("the class have some problems..",e);
         }
     }
     //不执行main
-    public void decode(String keyFile,String classname){
-        decode(keyFile,classname,false);
+    public Class<?> decode(String keyFile,String classname){
+        return decode(keyFile,classname,false);
     }
     //加密整个class系统
-    public void recursiveEncode(String classpath,String mainClass,String keyFile){
-        ReflectSet.getReflectSet().load(classpath,this,keyFile,false,mainClass);
+    public List<Class<?>> recursiveEncode(String mainClass,String keyFile){
+        return ReflectSet.getReflectSet().load(this,keyFile,false,mainClass);
     }
     //加密整个class系统
-    public void recursiveDecode(String classpath,String mainClass,String keyFile){
-        ReflectSet.getReflectSet().load(classpath,this,keyFile,true,mainClass);
+    public List<Class<?>> recursiveDecode(String mainClass,String keyFile){
+        return ReflectSet.getReflectSet().load(this,keyFile,true,mainClass);
     }
-
-    
 
     public static SimpleClassCoder getClassCoder() {
         return classCoder;
+    }
+
+    /** 设置读取classpath的路径，即包前面的根路径，如果不设置，默认为在项目资源文件 */
+
+    public void setApplicationFile(String file){
+       Util.setReadApplication(file);
     }
 }

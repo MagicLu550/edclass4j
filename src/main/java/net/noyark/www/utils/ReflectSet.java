@@ -17,6 +17,7 @@ package net.noyark.www.utils;
 
 
 import net.noyark.www.utils.encode.SimpleClassCoder;
+import net.noyark.www.utils.encode.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,9 +55,9 @@ public class ReflectSet {
 	 * configuration file,and generate a configuration file object
 	 */
 	
-	public List<String> load(String classpath,SimpleClassCoder classCoder,String keyFile,boolean isDecode,String mainClass) {
+	public List<Class<?>> load(SimpleClassCoder classCoder,String keyFile,boolean isDecode,String mainClass) {
 		try {
-			return scanPackage(classpath,classCoder,keyFile,isDecode,mainClass);
+			return scanPackage(classCoder,keyFile,isDecode,mainClass);
 		} catch (IllegalArgumentException | IllegalAccessException | ClassNotFoundException | InstantiationException
 				| IOException e) {
 			e.printStackTrace();
@@ -74,9 +75,10 @@ public class ReflectSet {
 	 * @throws ClassNotFoundException
 	 * @throws InstantiationException
 	 */
-	private List<String> scanPackage(String classPath, SimpleClassCoder classCoder,String keyFile,boolean decode,String mainClass) throws IllegalArgumentException, IllegalAccessException, IOException, ClassNotFoundException, InstantiationException {
+	private List<Class<?>> scanPackage( SimpleClassCoder classCoder,String keyFile,boolean decode,String mainClass) throws IllegalArgumentException, IllegalAccessException, IOException, ClassNotFoundException, InstantiationException {
 		List<String> list = new ArrayList<>();
-		File file = new File(classPath);
+		List<Class<?>> classes = new ArrayList<>();
+		File file = new File(Util.getClassPath(""));
 		List<File> fileName = loadClass(file);
 		for(File fn:fileName) {
 			File[] fs = fn.listFiles();
@@ -95,14 +97,16 @@ public class ReflectSet {
 			classCoder.encode(keyFile,clzs);
 		}else{
 			for(String cname:clzs){
+				Class<?> clazz;
 				if(cname.equals(mainClass)){
-					classCoder.decode(keyFile,cname,true);
+					clazz = classCoder.decode(keyFile,cname,true);
 				}else{
-					classCoder.decode(keyFile,cname);
+					clazz = classCoder.decode(keyFile,cname);
 				}
+				classes.add(clazz);
 			}
 		}
-		return list;
+		return classes;
 	}
 
 	
