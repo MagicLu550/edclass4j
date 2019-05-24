@@ -4,6 +4,7 @@ import net.noyark.www.utils.Message;
 import net.noyark.www.utils.ReflectSet;
 import net.noyark.www.utils.ex.ParseException;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -59,5 +60,21 @@ public class SimpleClassCoder {
 
     public void setApplicationFile(String file){
        Util.setReadApplication(file);
+    }
+    /** 获取class文件输出路径，如果为this，则是覆盖现行的路径 */
+    public String  getClassOut(){
+        return Util.getClassOut();
+    }
+    /** 获取application classpath，以你定义的application.properties内容为准*/
+    public String getClassPath(String name){
+        return Util.getClassPath(name);
+    }
+    /** 获取keyfile文件夹所在的绝对路径 */
+    public File getKeyFile(){
+        return Util.getKeyFile();
+    }
+    /** 获取jar包所在路径 */
+    public File jarInFile(){
+        return Util.getJarInFIle();
     }
 }

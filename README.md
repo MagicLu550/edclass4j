@@ -52,12 +52,14 @@ empower提供了一堆的api，用于辅助在代码端实现功能，主要分�
 * 本地加密端的服务
     * SimpleClassCoder
         * void encode(String fileName,String... classname)
-            * 将class文件加密，覆盖原来class文件
-        * void decode()
-       
+            * 将class文件加密，覆盖原来class文件，现在可以指定文件
+        * void decode() 解码
+        * recursiveEncode和recursiveDecode可以将全部application classpath下的class文件加载
+        * 
 
 * 远程授权端的服务
 
+###### 其他小特性
 * 变量和路径
 加入了keyfile的概念，可以将key文件放在这里进行解析
 
@@ -72,6 +74,23 @@ empower提供了一堆的api，用于辅助在代码端实现功能，主要分�
 声明变量:$key=value
 
 使用变量:echo ${名字}后面要拼接直接写即可，也可以后续加变量
+
+将解析class文件的路径设置为
+
+/classes/
+
+另外，application文件路径设置在
+
+/application.properties
+
+另外使用前缀classpath:可以指定到项目资源文件
+
+如
+
+classpath:application.properties
+
+内置变量
+jarin和keyfile，可以直接调用
 
 
 
