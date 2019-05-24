@@ -72,6 +72,7 @@ public class JarEncode {
         commandBaseMap.put("dcclass",new Dcclass(connector));
         commandBaseMap.put("declassall",new DeclassAll());
         commandBaseMap.put("enclassall",new EnclassAll());
+        commandBaseMap.put("sppf",new Sppf());
     }
 
     public static class CommandThread implements Runnable{

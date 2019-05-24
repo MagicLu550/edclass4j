@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Class-Path: snakeyaml-1.24.jar mysql-connector-java-5.1.25.jar commons
+ -pool2-2.6.1.jar commons-logging-1.2.jar commons-io-2.6.jar commons-d
+ bcp2-2.6.0.jar
+Main-Class: net.noyark.www.utils.JarEncode
+
