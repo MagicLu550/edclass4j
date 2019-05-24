@@ -39,6 +39,8 @@ public class JarEncode {
         commandBaseMap = new HashMap<>();
         connector = DB_CONNECT.getConnector();
         registerCommand();
+        vars.put("jarin",commandBaseMap.get("jarin").execute(new String[1]).toString());
+        vars.put("keyfile",commandBaseMap.get("keyfile").execute(new String[1]).toString());
     }
 
     public static void main(String[] args){
@@ -81,6 +83,7 @@ public class JarEncode {
                         String value = right_left[1];
                         Set<Map.Entry<String,CommandBase>> set = commandBaseMap.entrySet();
                         //变量指令只支持jarin keyfile的
+
                         value = value
                                 .replace("{jarin}",commandBaseMap.get("jarin").execute(new String[]{}).toString())
                                 .replace("{keyfile}",commandBaseMap.get("keyfile").execute(new String[]{}).toString());

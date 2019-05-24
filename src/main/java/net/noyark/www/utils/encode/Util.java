@@ -1,6 +1,5 @@
 package net.noyark.www.utils.encode;
 
-import net.noyark.www.utils.Message;
 
 import java.io.*;
 import java.util.Properties;
@@ -29,19 +28,17 @@ public class Util
     }
 
     /**
-     * now:file
+     * classpath:file
      * @param file
      */
     public static void setReadApplication(String file){
         try{
             String in;
-            if(file.startsWith("now:")){
-                in = new File(Util.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile()+"/"+file.substring(file.indexOf(":")+1);
+            if(file.startsWith("classpath:")){
+                readApplication = Util.class.getResourceAsStream(file.replace("classpath:",""));
             }else{
-                in = new File(file).getPath();
+                readApplication = new FileInputStream(file);
             }
-            Message.info(in);
-            readApplication = new FileInputStream(in);
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -62,21 +59,21 @@ public class Util
             InputStream in;
             //自定义配置文件位置
             if(readApplication == null){
-                in = Util.class.getResourceAsStream("application.properties");
+                in = new FileInputStream(getJarInFIle()+"/application.properties");
             }else{
                 in = readApplication;
             }
-            if(in!=null){
-                properties.load(in);
-                String classpath = properties.getProperty("classpath");
-                if(classpath == null){
-                    classpath = "target/classes/";
-                }
-                String replace = name.replace(".","/");
-                filename = classpath.endsWith("/")?classpath+replace:classpath+"/"+replace;
+            if(in == null){
+                filename = getJarInFIle()+"/"+name;
             }else{
-                filename = "target/classes/"+name.replace(".","/");
+                properties.load(in);
+                String cp = properties.getProperty("classpath");
+                if(cp.startsWith("now:")){
+                    filename = (cp.replace("now:",getJarInFIle().toString()+"/")+"/"+name).replace(".","/");
+                }
+
             }
+
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -87,7 +84,7 @@ public class Util
         try{
             InputStream in;
             if(readApplication == null){
-                in = Util.class.getResourceAsStream("application.properties");
+                in = new FileInputStream(getJarInFIle()+"/application.properties");
             }else{
                 in = readApplication;
             }
