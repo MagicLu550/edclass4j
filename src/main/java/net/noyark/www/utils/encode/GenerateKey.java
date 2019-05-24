@@ -7,7 +7,7 @@ import javax.crypto.SecretKey;
 public class GenerateKey
 {
     static public void createKey(String args[]) throws Exception {
-        String keyFilename = args[0];
+        String keyFilename = Util.getJarInFIle()+"/"+args[0];
         String algorithm = "DES";
 
         // 生成密匙
