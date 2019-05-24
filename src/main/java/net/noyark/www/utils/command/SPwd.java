@@ -1,6 +1,6 @@
 package net.noyark.www.utils.command;
 
-import net.noyark.www.utils.Connector;
+import net.noyark.www.utils.api.Connector;
 
 /**
  * 设置或者修改密码

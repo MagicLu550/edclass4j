@@ -1,4 +1,6 @@
-package net.noyark.www.utils;
+package net.noyark.www.utils.api;
+
+import net.noyark.www.utils.DBTypes;
 
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -13,7 +15,7 @@ public interface Connector {
      * @param types
      */
 
-    void connect(String ip,String dbName,int port,DBTypes types);
+    void connect(String ip, String dbName, int port, DBTypes types);
 
     /**
      * 默认连接mysql

@@ -9,7 +9,7 @@ public class DBUtils {
 
     BasicDataSource dataSource;
 
-   DBUtils(DBTypes types,String name,String password,String dbName,String ip,int port){
+   public DBUtils(DBTypes types,String name,String password,String dbName,String ip,int port){
         dataSource = new BasicDataSource();
 
         dataSource.setDriverClassName(types.getDriver());

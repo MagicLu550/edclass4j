@@ -2,6 +2,7 @@ package net.noyark.www.utils.encode;
 
 import net.noyark.www.utils.Message;
 import net.noyark.www.utils.ReflectSet;
+import net.noyark.www.utils.api.ClassCoder;
 import net.noyark.www.utils.ex.ParseException;
 
 import java.io.File;
@@ -12,13 +13,9 @@ import java.util.List;
  * classpath在配置文件指定
  */
 
-public class SimpleClassCoder {
+public class SimpleClassCoder implements ClassCoder {
 
-    private static SimpleClassCoder classCoder;
 
-    static {
-        classCoder = new SimpleClassCoder();
-    }
 
     public void encode(String fileName,String... classname){
         try{
@@ -52,9 +49,7 @@ public class SimpleClassCoder {
         return ReflectSet.getReflectSet().load(this,keyFile,true,mainClass);
     }
 
-    public static SimpleClassCoder getClassCoder() {
-        return classCoder;
-    }
+
 
     /** 设置读取classpath的路径，即包前面的根路径，如果不设置，默认为在项目资源文件 */
 

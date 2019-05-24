@@ -1,5 +1,7 @@
 package net.noyark.www.utils;
 
+import net.noyark.www.utils.api.Connector;
+import net.noyark.www.utils.api.Pool;
 import net.noyark.www.utils.command.*;
 import net.noyark.www.utils.command.Random;
 import net.noyark.www.utils.ex.ShutDownException;
@@ -37,7 +39,7 @@ public class JarEncode {
 
     static {
         commandBaseMap = new HashMap<>();
-        connector = DB_CONNECT.getConnector();
+        connector = Pool.getConnector();
         registerCommand();
         vars.put("jarin",commandBaseMap.get("jarin").execute(new String[1]).toString());
         vars.put("keyfile",commandBaseMap.get("keyfile").execute(new String[1]).toString());

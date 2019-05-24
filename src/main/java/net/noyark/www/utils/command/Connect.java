@@ -1,6 +1,6 @@
 package net.noyark.www.utils.command;
 
-import net.noyark.www.utils.Connector;
+import net.noyark.www.utils.api.Connector;
 import net.noyark.www.utils.DBTypes;
 import org.apache.commons.io.FileUtils;
 

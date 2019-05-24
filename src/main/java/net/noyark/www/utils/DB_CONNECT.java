@@ -1,5 +1,8 @@
 package net.noyark.www.utils;
 
+import net.noyark.www.utils.DBTypes;
+import net.noyark.www.utils.DBUtils;
+import net.noyark.www.utils.api.Connector;
 import net.noyark.www.utils.ex.DBConnectException;
 import net.noyark.www.utils.ex.ParseException;
 import org.yaml.snakeyaml.Yaml;
@@ -28,13 +31,11 @@ import java.util.UUID;
  * @author magiclu550
  */
 
-public class DB_CONNECT implements Connector{
+public class DB_CONNECT implements Connector {
 
-    static {
-        connector = new DB_CONNECT();
-    }
 
-    private static DB_CONNECT connector;
+
+
 
     private String userName;
 
@@ -52,7 +53,7 @@ public class DB_CONNECT implements Connector{
 
     private String dbName;
 
-    private DB_CONNECT(){
+    public DB_CONNECT(){
         yaml = new Yaml();
     }
 
@@ -220,9 +221,7 @@ public class DB_CONNECT implements Connector{
         }
     }
 
-    public static DB_CONNECT getConnector() {
-        return connector;
-    }
+
 
     public String getUserName(){
         return userName;

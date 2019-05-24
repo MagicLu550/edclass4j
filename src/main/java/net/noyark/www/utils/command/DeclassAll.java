@@ -1,5 +1,6 @@
 package net.noyark.www.utils.command;
 
+import net.noyark.www.utils.api.Pool;
 import net.noyark.www.utils.encode.SimpleClassCoder;
 
 /**
@@ -14,7 +15,7 @@ public class DeclassAll implements CommandBase {
     @Override
     public Object execute(String[] args) {
 
-        SimpleClassCoder.getClassCoder().recursiveDecode(args[0],args[1]);
+        Pool.getClassCoder().recursiveDecode(args[0],args[1]);
         return "success";
     }
 }
