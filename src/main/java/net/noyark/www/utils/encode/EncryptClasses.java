@@ -8,8 +8,7 @@ import javax.crypto.spec.*;
 
 public class EncryptClasses
 {
-    static public void encode(String args[]) throws Exception {
-        String keyFilename = args[0];
+    static public void encode(String keyFilename,String args[]) throws Exception {
         String algorithm = "DES";
 
         // 生成密匙
@@ -24,7 +23,7 @@ public class EncryptClasses
         ecipher.init(Cipher.ENCRYPT_MODE, key, sr);
 
         // 加密命令行中指定的每一个类
-        for (int i=1; i<args.length; ++i) {
+        for (int i=0; i<args.length; ++i) {
             String filename = args[i];
             byte classData[] = Util.readFile(filename);  //读入类文件
             byte encryptedClassData[] = ecipher.doFinal(classData);  //加密

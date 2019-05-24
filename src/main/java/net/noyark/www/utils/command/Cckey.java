@@ -10,6 +10,7 @@ public class Cckey implements CommandBase{
             GenerateKey.createKey(args);
         }catch (Exception e){
             e.printStackTrace();
+            return "生成密钥文件过程中发生未知错误";
         }
 
         return "生成秘钥文件";

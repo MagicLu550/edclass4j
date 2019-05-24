@@ -18,6 +18,14 @@ public class Connect extends ConnectorCommand{
         super(connector);
     }
 
+    private static final int ARR_IP = 0;
+
+    private static final int ARR_DB_NAME = 1;
+
+    private static final int ARR_PORT = 2;
+
+    private static final int ARR_START_TYPE = 3;
+
     @Override
     public Object excute(String[] args) {
         if (args.length == 2){
@@ -25,10 +33,11 @@ public class Connect extends ConnectorCommand{
             if(args[0].equals("-f")){
                 try{
                     List<String> infor =  FileUtils.readLines(new File(args[1]),"UTF-8");
-                    connector.setUserName(infor.get(0));
-                    connector.setPassword(infor.get(1));
-                    connect(infor.get(3),infor.get(2),infor.get(4),infor.get(5));
-                    connector.setTable(infor.get(6));
+                    connector.setUserName(infor.get(Save.USERNAME));
+                    connector.setPassword(infor.get(Save.PASSWORD));
+                    //ip db start port
+                    connect(infor.get(Save.IP),infor.get(Save.DB_NAME),infor.get(Save.PORT),infor.get(Save.START_TYPE));
+                    connector.setTable(infor.get(Save.TABLE));
                 }catch (IOException e){
                     e.printStackTrace();
                 }
@@ -50,12 +59,12 @@ public class Connect extends ConnectorCommand{
     }
 
     private void connect(String... args){
-        if(args[2].toUpperCase().equals("oracle")){
-            connector.connect(args[0],args[1],Integer.parseInt(args[2]),DBTypes.ORACLE);
-        }else if(args[2].toUpperCase().equals("sqlserver")){
-            connector.connect(args[0],args[1],Integer.parseInt(args[2]),DBTypes.SQLSERVER);
+        if(args[ARR_START_TYPE].toUpperCase().equals("oracle")){
+            connector.connect(args[ARR_IP],args[ARR_DB_NAME],Integer.parseInt(args[ARR_PORT]),DBTypes.ORACLE);
+        }else if(args[ARR_START_TYPE].toUpperCase().equals("sqlserver")){
+            connector.connect(args[ARR_IP],args[ARR_DB_NAME],Integer.parseInt(args[ARR_PORT]),DBTypes.SQLSERVER);
         }else{
-            connector.connect(args[0],args[1],Integer.parseInt(args[2]),DBTypes.MYSQL);
+            connector.connect(args[ARR_IP],args[ARR_DB_NAME],Integer.parseInt(args[ARR_PORT]),DBTypes.MYSQL);
         }
     }
 }

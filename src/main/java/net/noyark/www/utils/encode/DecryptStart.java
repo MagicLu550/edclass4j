@@ -5,6 +5,7 @@ import net.noyark.www.utils.Message;
 import java.io.*;
 import java.security.*;
 import java.lang.reflect.*;
+import java.util.Properties;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 
@@ -17,10 +18,9 @@ public class DecryptStart extends ClassLoader
     // 构造函数：设置解密所需要的对象
     public DecryptStart(SecretKey key) throws GeneralSecurityException {
         this.key = key;
-
         String algorithm = "DES";
         SecureRandom sr = new SecureRandom();
-        System.err.println("[DecryptStart: creating cipher]");
+        Message.info("[DecryptStart: creating cipher]");
         cipher = Cipher.getInstance(algorithm);
         cipher.init(Cipher.DECRYPT_MODE, key, sr);
     }
@@ -69,7 +69,7 @@ public class DecryptStart extends ClassLoader
     public Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
         try {
             // 要创建的Class对象
-            Class clasz = null;
+            Class clasz;
 
             // 必需的步骤1：如果类已经在系统缓冲之中，不必再次装入它
             clasz = findLoadedClass(name);
@@ -79,15 +79,31 @@ public class DecryptStart extends ClassLoader
 
             // 下面是定制部分
             try{
+                String filename;
+                Properties properties = new Properties();
+                InputStream in = this.getResourceAsStream("application.properties");
+                if(in!=null){
+                    properties.load(in);
+                    String classpath = properties.getProperty("encode.classpath");
+                    if(classpath == null){
+                        classpath = "target/classes/";
+                    }
+                    String replace = name.replace(".","/");
+                    filename = classpath.endsWith("/")?classpath+replace:classpath+"/"+replace;
+                }else{
+                    filename = "target/classes/"+name.replace(".","/");
+                }
+
                 //读取经过加密的类文件
-                byte classData[] = Util.readFile(name+".class");
+
+
+                byte classData[] = Util.readFile(filename+".class");
                 if(classData != null){
                     byte decryptedClassData[] = cipher.doFinal(classData);  //解密
                     clasz = defineClass( name, decryptedClassData, 0, decryptedClassData.length); // 再把它转换成一个类
                     Message.info( "[DecryptStart: decrypting class "+name+"]");
                 }
             }catch(FileNotFoundException fnfe){
-
             }
 
             // 必需的步骤2：如果上面没有成功

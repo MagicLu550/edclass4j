@@ -68,6 +68,8 @@ public class JarEncode {
         //TODO 明天用我的reflectset库实现全部加密
         //eclass all
         commandBaseMap.put("eclass",new Eclass());//eclass keyFileName class1 class2 class3...
+        commandBaseMap.put("dclass",new Dclass());
+        commandBaseMap.put("dcclass",new Dcclass(connector));
     }
 
     public static class CommandThread implements Runnable{
@@ -81,7 +83,7 @@ public class JarEncode {
                     CommandBase commandInstance = commandBaseMap.get(cmd);
                     if(commandInstance != null){
                         Object o = commandInstance.excute(alls);
-                        Message.info(o.toString());
+                        Message.info(o==null?"null":o.toString());
                     }else {
                         Message.error("no such command");
                     }
