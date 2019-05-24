@@ -1,5 +1,7 @@
 package net.noyark.www.utils.encode;
 
+import net.noyark.www.utils.Message;
+
 import java.io.*;
 import java.util.Properties;
 
@@ -26,9 +28,20 @@ public class Util
         fout.close();
     }
 
+    /**
+     * now:file
+     * @param file
+     */
     public static void setReadApplication(String file){
         try{
-            readApplication = new FileInputStream(file);
+            String in;
+            if(file.startsWith("now:")){
+                in = new File(Util.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile()+"/"+file.substring(file.indexOf(":")+1);
+            }else{
+                in = new File(file).getPath();
+            }
+            Message.info(in);
+            readApplication = new FileInputStream(in);
         }catch (IOException e){
             e.printStackTrace();
         }
