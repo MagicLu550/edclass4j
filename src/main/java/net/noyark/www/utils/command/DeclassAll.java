@@ -5,7 +5,7 @@ import net.noyark.www.utils.encode.SimpleClassCoder;
 /**
  * 解密全部项目的class文件，目前只支持将class文件加密打包
  *
- * declassall mainClass keyFile
+ * declassall mainClass KeyFile
  * classpath在配置文件
  *
  */

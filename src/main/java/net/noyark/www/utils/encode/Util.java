@@ -47,6 +47,14 @@ public class Util
         }
     }
 
+    public static File getKeyFile(){
+        return new File(getJarInFIle()+"/keyfile");
+    }
+
+    public static File getJarInFIle(){
+        return new File(Util.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
+    }
+
     public static String getClassPath(String name){
         String filename = null;
         try{

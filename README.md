@@ -43,6 +43,19 @@
         * classpath 指定了第一级包所在的根目录
 * stable 设置插入随机值的表
     * tablename
+* keyfile 获取放key文件的地方
+* jarin 获取jar包所在绝地路径
+* echo 用于输出变量
+    * $key=value,{jarin}输出jar包所在文件夹的绝对路径,{keyfile}输出解析key文件所在路径
+###### 提供的api
+empower提供了一堆的api，用于辅助在代码端实现功能，主要分为
+* 本地加密端的服务
+    * SimpleClassCoder
+        * void encode(String fileName,String... classname)
+            * 将class文件
+        * void decode()
+
+* 远程授权端的服务
 
 
 

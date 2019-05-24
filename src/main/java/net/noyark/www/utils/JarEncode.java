@@ -1,11 +1,10 @@
 package net.noyark.www.utils;
 
 import net.noyark.www.utils.command.*;
+import net.noyark.www.utils.command.Random;
 import net.noyark.www.utils.ex.ShutDownException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
+import java.util.*;
 
 /**
  * 该类负责将jar包进行加密处理和在数据库生成密钥
@@ -29,6 +28,8 @@ import java.util.concurrent.CountDownLatch;
  */
 
 public class JarEncode {
+
+    private static Map<String,String> vars = new HashMap<>();
 
     private static Connector connector;
 
@@ -64,6 +65,9 @@ public class JarEncode {
         commandBaseMap.put("declassall",new DeclassAll());
         commandBaseMap.put("enclassall",new EnclassAll());
         commandBaseMap.put("sppf",new Sppf());
+        commandBaseMap.put("keyfile",new KeyFile());
+        commandBaseMap.put("jarin",new Jarin());
+        commandBaseMap.put("echo",new Echo());
     }
 
     public static class CommandThread implements Runnable{
@@ -72,14 +76,31 @@ public class JarEncode {
             try{
                 while(true){
                     String cmd = Message.cmd();
-                    String arg = Message.input();
-                    String[] alls = arg.trim().split(" ");
-                    CommandBase commandInstance = commandBaseMap.get(cmd);
-                    if(commandInstance != null){
-                        Object o = commandInstance.execute(alls);
-                        Message.info(o==null?"null":o.toString());
-                    }else {
-                        Message.error("no such command");
+                    if(cmd.startsWith("$")){
+                        String[] right_left = cmd.split("=");
+                        String value = right_left[1];
+                        Set<Map.Entry<String,CommandBase>> set = commandBaseMap.entrySet();
+                        //变量指令只支持jarin keyfile的
+                        value = value
+                                .replace("{jarin}",commandBaseMap.get("jarin").execute(new String[]{}).toString())
+                                .replace("{keyfile}",commandBaseMap.get("keyfile").execute(new String[]{}).toString());
+                        vars.put(right_left[0].replace("$",""),value);
+                    }else{
+                        String arg = Message.input();
+                        String[] alls = arg.trim().split(" ");
+                        Set<Map.Entry<String,String>> set = vars.entrySet();
+                        for(int i =0;i<alls.length;i++){
+                            for(Map.Entry<String,String> entry:set) {
+                                alls[i] = alls[i].replace("${"+entry.getKey()+"}",entry.getValue());
+                            }
+                        }
+                        CommandBase commandInstance = commandBaseMap.get(cmd);
+                        if(commandInstance != null){
+                            Object o = commandInstance.execute(alls);
+                            Message.info(o==null?"null":o.toString());
+                        }else {
+                            Message.error("no such command");
+                        }
                     }
                 }
             }catch (ShutDownException e){
