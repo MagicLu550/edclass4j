@@ -10,7 +10,7 @@ public class Dclass implements CommandBase {
             DecryptStart.decode(args,true);
         }catch (Exception e){
             e.printStackTrace();
-            return "解码失败";
+            return "解码失败,缺少主要参数";
         }
         return "解码成功";
     }
