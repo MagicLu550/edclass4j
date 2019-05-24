@@ -89,8 +89,37 @@ empower提供了一堆的api，用于辅助在代码端实现功能，主要分�
 
 classpath:application.properties
 
+使用now: 前缀表示指向当前jar包所在目录
+
+now:application.properties
+
 内置变量
 jarin和keyfile，可以直接调用
+
+导入api
+```xml
+        <dependency>
+            <groupId>net.noyark</groupId>
+            <artifactId>empower-classcoder</artifactId>
+            <version>0.0.2</version>
+        </dependency>
+
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <name>Team Neux Repository</name><url>http://www.noyark.net:8081/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nexus</id>
+            <name>Team Neux Repository</name>
+            <url>http://www.noyark.net:8081/nexus/content/groups/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+```
+api都在api包里
+
 
 
 
