@@ -7,6 +7,6 @@ public interface CommandBase {
      * @return
      */
 
-    Object excute(String[] args);
+    Object execute(String[] args);
 
 }

@@ -11,7 +11,7 @@ public class Compare extends ConnectorCommand{
     }
 
     @Override
-    public Object excute(String[] args) {
+    public Object execute(String[] args) {
         try{
             return connector.compareKey(args[0],args[1],Integer.parseInt(args[2]));
         }catch (SQLException e){

@@ -5,7 +5,7 @@ import net.noyark.www.utils.encode.GenerateKey;
 public class Cckey implements CommandBase{
 
     @Override
-    public Object excute(String[] args) {
+    public Object execute(String[] args) {
         try{
             GenerateKey.createKey(args);
         }catch (Exception e){

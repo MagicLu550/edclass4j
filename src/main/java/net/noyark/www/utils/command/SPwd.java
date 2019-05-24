@@ -13,7 +13,7 @@ public class SPwd extends ConnectorCommand{
     }
 
     @Override
-    public Object excute(String[] args) {
+    public Object execute(String[] args) {
         connector.setPassword(args[0]);
         return "设置数据库连接密码成功"+args[0].replaceAll(".","\\*");
     }

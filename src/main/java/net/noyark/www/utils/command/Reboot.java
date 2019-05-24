@@ -13,7 +13,7 @@ public class Reboot implements CommandBase {
     }
 
     @Override
-    public Object excute(String[] args) {
+    public Object execute(String[] args) {
         latch.countDown();
         throw new ShutDownException();
     }

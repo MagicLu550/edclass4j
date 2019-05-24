@@ -9,7 +9,7 @@ public class Ctable extends ConnectorCommand {
     }
 
     @Override
-    public Object excute(String[] args) {
+    public Object execute(String[] args) {
         connector.createKeyTable(args[0]);
         return "创建成功";
     }

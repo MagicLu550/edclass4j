@@ -9,7 +9,7 @@ public class Stable extends ConnectorCommand {
     }
 
     @Override
-    public Object excute(String[] args) {
+    public Object execute(String[] args) {
         connector.setTable(args[0]);
         return "设置成功"+args[0];
     }

@@ -34,7 +34,7 @@ public class Save extends ConnectorCommand {
 
     //save fileName
     @Override
-    public Object excute(String[] args) {
+    public Object execute(String[] args) {
 
         DB_CONNECT db_connect = (DB_CONNECT) connector;
 

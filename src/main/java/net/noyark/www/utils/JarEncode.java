@@ -82,7 +82,7 @@ public class JarEncode {
                     String[] alls = arg.trim().split(" ");
                     CommandBase commandInstance = commandBaseMap.get(cmd);
                     if(commandInstance != null){
-                        Object o = commandInstance.excute(alls);
+                        Object o = commandInstance.execute(alls);
                         Message.info(o==null?"null":o.toString());
                     }else {
                         Message.error("no such command");

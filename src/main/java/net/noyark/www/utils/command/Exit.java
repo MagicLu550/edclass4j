@@ -11,7 +11,7 @@ public class Exit implements CommandBase {
 
 
     @Override
-    public Object excute(String[] args) {
+    public Object execute(String[] args) {
         throw new ShutDownException();
     }
 }

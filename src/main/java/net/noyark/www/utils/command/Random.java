@@ -9,7 +9,7 @@ public class Random extends ConnectorCommand{
     }
 
     @Override
-    public Object excute(String[] args) {
+    public Object execute(String[] args) {
         if(!args[0].equals("")){
             connector.randomKeys(Integer.parseInt(args[0]));
         }else{

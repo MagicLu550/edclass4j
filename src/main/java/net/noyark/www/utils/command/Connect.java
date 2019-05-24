@@ -27,7 +27,7 @@ public class Connect extends ConnectorCommand{
     private static final int ARR_START_TYPE = 3;
 
     @Override
-    public Object excute(String[] args) {
+    public Object execute(String[] args) {
         if (args.length == 2){
             //just ip dbName
             if(args[0].equals("-f")){

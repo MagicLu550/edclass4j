@@ -13,7 +13,7 @@ public class SUser extends ConnectorCommand{
     }
 
     @Override
-    public Object excute(String[] args) {
+    public Object execute(String[] args) {
         connector.setUserName(args[0]);
         return "设置数据库连接用户名成功"+args[0];
     }

@@ -37,7 +37,7 @@ public class Dcclass extends ConnectorCommand {
     }
 
     @Override
-    public Object excute(String[] args) {
+    public Object execute(String[] args) {
         try{
             if("-f".equals(args[2])){
                 //keyname classname;
