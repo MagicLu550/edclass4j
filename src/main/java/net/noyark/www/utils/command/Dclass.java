@@ -7,7 +7,7 @@ public class Dclass implements CommandBase {
     @Override
     public Object excute(String[] args) {
         try{
-            DecryptStart.decode(args);
+            DecryptStart.decode(args,true);
         }catch (Exception e){
             e.printStackTrace();
             return "解码失败";

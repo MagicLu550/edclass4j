@@ -43,12 +43,12 @@ public class Dcclass extends ConnectorCommand {
                 //keyname classname;
                 String[] deargs = new String[args.length-BEFORE_LENGTH_F];
                 System.arraycopy(args,BEFORE_LENGTH_F,deargs,0,deargs.length);
-                DecryptStart.decode(deargs);
+                DecryptStart.decode(deargs,true);
                 return connector.compareKey(args[KEY_FILE_INDEX_F],args[KEY_NAME_INDEX_F],args[IP_INDEX_F],Integer.parseInt(args[PORT_INDEX_F]));
             }else{
                 String[] deargs = new String[args.length-BEFORE_LENGTH];
                 System.arraycopy(args,BEFORE_LENGTH,deargs,0,deargs.length);
-                DecryptStart.decode(deargs);
+                DecryptStart.decode(deargs,true);
                 return connector.compareKey(args[KEY_INDEX],args[IP_INDEX],Integer.parseInt(args[PORT_INDEX]));
             }
         }catch (Exception e){

@@ -28,7 +28,7 @@ public class DecryptStart extends ClassLoader
     // main过程：在这里读入密匙，创建DecryptStart的实例，它就是定制ClassLoader。
     // 设置好ClassLoader以后，用它装入应用实例，
     // 最后，通过Java Reflection API调用应用实例的main方法
-    public static void decode(String args[]) throws Exception {
+    public static Class<?> decode(String args[],boolean executeMain) throws Exception {
         String keyFilename = args[0];
         String appName = args[1];
 
@@ -50,20 +50,30 @@ public class DecryptStart extends ClassLoader
         Message.info("[DecryptStart: loading "+appName+"]");
         Class clasz = dr.loadClass(appName);
 
-        // 最后通过Reflection API调用应用实例
-        // 的main()方法
+        return clasz;
+    }
 
-        // 获取一个对main()的引用
-        String proto[] = new String[1];
-        Class mainArgs[] = { (new String[1]).getClass() };
-        Method main = clasz.getMethod("main", mainArgs);
+    private void excuteMain(Class<?> clasz,String[] realArgs,String appName,boolean executeMain){
+        if(executeMain){
+            try{
+                // 最后通过Reflection API调用应用实例
+                // 的main()方法
 
-        // 创建一个包含main()方法参数的数组
-        Object argsArray[] = { realArgs };
-        Message.info("[DecryptStart: running "+appName+".main()]");
+                // 获取一个对main()的引用
+                String proto[] = new String[1];
+                Class mainArgs[] = { (new String[1]).getClass() };
+                Method main = clasz.getMethod("main", mainArgs);
 
-        // 调用main()
-        main.invoke(null, argsArray);
+                // 创建一个包含main()方法参数的数组
+                Object argsArray[] = { realArgs };
+                Message.info("[DecryptStart: running "+appName+".main()]");
+
+                // 调用main()
+                main.invoke(null, argsArray);
+            }catch (Exception e){
+                System.err.println("没有找到main方法应用程序入口，无法执行");
+            }
+        }
     }
 
     public Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
