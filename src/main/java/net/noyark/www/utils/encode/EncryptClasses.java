@@ -27,7 +27,12 @@ public class EncryptClasses
             String filename = Util.getClassPath(args[i]);
             byte classData[] = Util.readFile(filename+".class");  //读入类文件
             byte encryptedClassData[] = ecipher.doFinal(classData);  //加密
-            Util.writeFile(filename+".class", encryptedClassData);  // 保存加密后的内容
+            String out = Util.getClassOut();
+            if(out.startsWith("THIS")) {
+                Util.writeFile(filename + ".class", encryptedClassData);  // 保存加密后的内容
+            }else{
+                Util.writeFile(out,encryptedClassData);
+            }
             Message.info("Encrypted " + filename);
         }
     }

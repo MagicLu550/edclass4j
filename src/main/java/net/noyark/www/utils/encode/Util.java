@@ -82,4 +82,27 @@ public class Util
         }
         return filename;
     }
+
+    public static String getClassOut(){
+        try{
+            InputStream in;
+            if(readApplication == null){
+                in = Util.class.getResourceAsStream("application.properties");
+            }else{
+                in = readApplication;
+            }
+            Properties properties = new Properties();
+            properties.load(in);
+            String to = properties.getProperty("encode.to");
+            if(to.equals("this")){
+                return "THIS:在当前的class文件所在地，会被覆盖";
+            }else{
+                //输出在out文件
+                return getJarInFIle()+"/out/"+to;
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

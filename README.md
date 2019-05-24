@@ -52,10 +52,26 @@ empower提供了一堆的api，用于辅助在代码端实现功能，主要分�
 * 本地加密端的服务
     * SimpleClassCoder
         * void encode(String fileName,String... classname)
-            * 将class文件
+            * 将class文件加密，覆盖原来class文件
         * void decode()
+       
 
 * 远程授权端的服务
+
+* 变量和路径
+加入了keyfile的概念，可以将key文件放在这里进行解析
+
+如果在解密或者加密时直到你的key文件在哪里
+
+    > $keyfile={keyfile}
+
+    > eclass ${keyfile}/xx.key xx.class
+
+都可以这样做，除了生成密钥不能这样做，因为它默认是在{jarfile}生成，即和jar包同级的地方
+
+声明变量:$key=value
+
+使用变量:echo ${名字}后面要拼接直接写即可，也可以后续加变量
 
 
 
