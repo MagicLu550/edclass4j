@@ -19,4 +19,9 @@ public class Compare extends ConnectorCommand{
             return false;
         }
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"用于从远程数据库找到这个key是否存在","ip 绑定服务器ip地址 port 绑定服务器端口"};
+    }
 }

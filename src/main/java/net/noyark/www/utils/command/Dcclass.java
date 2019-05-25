@@ -56,4 +56,9 @@ public class Dcclass extends ConnectorCommand {
             return "error";
         }
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"解码代码，并判断远程端是否符合，前提连接了远程端","ip 服务器地址 port 端口 key 远端秘钥 class_key_filename 秘钥文件 classname... class字节码文件的包名+类名","ip port -f 选项 filename uuid秘钥的yml文件 key_name yml文件中的键名 class_key_filename classname..."};
+    }
 }

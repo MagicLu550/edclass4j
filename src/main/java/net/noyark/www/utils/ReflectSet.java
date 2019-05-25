@@ -37,7 +37,6 @@ import java.util.List;
  * <BR>&nbsp;new ReflectSet("the parent package",this).loadAnnotation();
  * @author magiclu550
  * @since JDK1.8
- * @since oaml 003
  *
  */
 
@@ -98,7 +97,7 @@ public class ReflectSet {
 		}else{
 			for(String cname:clzs){
 				Class<?> clazz;
-				if(cname.equals(mainClass)){
+				if(cname.replaceAll("/|\\\\",".").equals(mainClass)){
 					clazz = classCoder.decode(keyFile,cname,true);
 				}else{
 					clazz = classCoder.decode(keyFile,cname);

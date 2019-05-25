@@ -18,4 +18,9 @@ public class DeclassAll implements CommandBase {
         Pool.getClassCoder().recursiveDecode(args[0],args[1]);
         return "success";
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"解密指定application classpath下全部的class文件","main_class 运行主类 keyFile 加密key"};
+    }
 }

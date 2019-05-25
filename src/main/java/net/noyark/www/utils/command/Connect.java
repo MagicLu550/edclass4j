@@ -58,6 +58,12 @@ public class Connect extends ConnectorCommand{
         return "connect successfully";
     }
 
+
+    @Override
+    public String[] usage() {
+        return new String[]{"用于连接远程授权端","-f filename 直接导入标准的配置文件","ip dbname 默认为mysql数据库","ip dbname type 选择数据库类型，有mysql oracle sqlserver"};
+    }
+
     private void connect(String... args){
         if(args[ARR_START_TYPE].toUpperCase().equals("oracle")){
             connector.connect(args[ARR_IP],args[ARR_DB_NAME],Integer.parseInt(args[ARR_PORT]),DBTypes.ORACLE);

@@ -73,6 +73,7 @@ public class JarEncode {
         commandBaseMap.put("echo",new Echo());
         commandBaseMap.put("dev",new Dev());//jar
         commandBaseMap.put("gclass",new Gclass());//get classes
+        commandBaseMap.put("help",new Help(commandBaseMap));
     }
 
     public static class CommandThread implements Runnable{

@@ -16,4 +16,9 @@ public class Eclass implements CommandBase{
         }
         return "加密成功";
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"keyfile 加密key文件 classname... 包名+类名"};
+    }
 }

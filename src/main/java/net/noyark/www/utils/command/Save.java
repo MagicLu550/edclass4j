@@ -56,4 +56,9 @@ public class Save extends ConnectorCommand {
         }
         return "save successfully";
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"将目前数据库配置保存到硬盘"};
+    }
 }

@@ -11,4 +11,9 @@ public class Echo implements CommandBase {
         }
         return builder;
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"输出","${var} 变量名"};
+    }
 }

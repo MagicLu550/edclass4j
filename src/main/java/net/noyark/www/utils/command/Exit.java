@@ -14,4 +14,9 @@ public class Exit implements CommandBase {
     public Object execute(String[] args) {
         throw new ShutDownException();
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"关闭程序"};
+    }
 }

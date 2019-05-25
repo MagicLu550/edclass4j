@@ -38,4 +38,9 @@ public class Dev implements CommandBase {
         }
         return "success";
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"打包成jar","target 目标路径","classpath 指定打包根路径,target 目标路径","-m选项 在前面基础上可以添加主运行类"};
+    }
 }

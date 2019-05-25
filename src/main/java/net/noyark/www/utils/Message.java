@@ -1,6 +1,10 @@
 package net.noyark.www.utils;
 
+import org.fusesource.jansi.Ansi;
+
 import java.util.Scanner;
+
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class Message {
     static {
@@ -10,6 +14,7 @@ public class Message {
     private static Scanner scanner;
 
     public static void info(String msg){
+
         System.out.println("[INFO ]"+msg);
     }
 

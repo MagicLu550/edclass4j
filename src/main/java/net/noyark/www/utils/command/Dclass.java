@@ -14,4 +14,9 @@ public class Dclass implements CommandBase {
         }
         return "解码成功";
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"解码单个class文件","class_key_file 解码key文件名 classname class包名+类名"};
+    }
 }

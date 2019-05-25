@@ -17,4 +17,9 @@ public class Random extends ConnectorCommand{
         }
         return "生成成功";
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"可以生成多个授权码，并插入授权端","number 生成数量"};
+    }
 }

@@ -13,4 +13,9 @@ public class Stable extends ConnectorCommand {
         connector.setTable(args[0]);
         return "设置成功"+args[0];
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"设置连接的表","table_name 表名"};
+    }
 }

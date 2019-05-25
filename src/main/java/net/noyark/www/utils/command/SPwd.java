@@ -17,4 +17,9 @@ public class SPwd extends ConnectorCommand{
         connector.setPassword(args[0]);
         return "设置数据库连接密码成功"+args[0].replaceAll(".","\\*");
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"设置密码","password 数据库密码"};
+    }
 }

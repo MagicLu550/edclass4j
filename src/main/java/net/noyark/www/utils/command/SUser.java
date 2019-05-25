@@ -17,4 +17,9 @@ public class SUser extends ConnectorCommand{
         connector.setUserName(args[0]);
         return "设置数据库连接用户名成功"+args[0];
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"修改用户名","user_name 用户名"};
+    }
 }

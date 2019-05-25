@@ -9,4 +9,9 @@ public interface CommandBase {
 
     Object execute(String[] args);
 
+    /**
+     * usage
+     */
+    String[] usage();
+
 }

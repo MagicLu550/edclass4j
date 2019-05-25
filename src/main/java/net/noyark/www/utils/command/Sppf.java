@@ -14,4 +14,9 @@ public class Sppf implements CommandBase{
         Util.setReadApplication(args[0]);
         return "set successfully";
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"设置配置文件路径","file_name 路径+文件名"};
+    }
 }

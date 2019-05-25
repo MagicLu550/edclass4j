@@ -18,4 +18,9 @@ public class Reboot implements CommandBase {
         latch.countDown();
         throw new ShutDownException();
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"淘汰"};
+    }
 }

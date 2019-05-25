@@ -15,4 +15,9 @@ public class Cckey implements CommandBase{
 
         return "生成秘钥文件";
     }
+
+    @Override
+    public String[] usage() {
+        return new String[]{"用于生成秘钥文件","key_File_Name key文件生成路径，相对于keyfile路径"};
+    }
 }

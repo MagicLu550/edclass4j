@@ -13,7 +13,7 @@ public class EncryptClasses
 
         // 生成密匙
         SecureRandom sr = new SecureRandom();
-        byte rawKey[] = Util.readFile(keyFilename);
+        byte rawKey[] = Util.readFile(Util.getKeyFile()+"/"+keyFilename);
         DESKeySpec dks = new DESKeySpec(rawKey);
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance( algorithm );
         SecretKey key = keyFactory.generateSecret(dks);

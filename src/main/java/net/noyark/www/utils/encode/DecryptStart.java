@@ -57,7 +57,7 @@ public class DecryptStart extends ClassLoader
         // 创建应用主类的一个实例，通过ClassLoader装入它
         Message.info("[DecryptStart: loading "+appName+"]");
 
-        Class clasz = dr.loadClass(appName);
+        Class clasz = dr.loadClass(appName.replaceAll("/|\\\\","."));
 
         executeMain(clasz,realArgs,appName,executeMain);
         return clasz;
@@ -79,7 +79,7 @@ public class DecryptStart extends ClassLoader
                 // 调用main()
                 main.invoke(null, argsArray);
             }catch (Exception e){
-                System.err.println("没有找到main方法应用程序入口，无法执行");
+                Message.error("没有找到main方法应用程序入口，无法执行");
             }
         }
     }
