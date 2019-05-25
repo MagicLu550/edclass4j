@@ -8,6 +8,7 @@ class Help constructor(var map:Map<String,CommandBase>): CommandBase{
 
     override fun execute(args: Array<out String>?):Any {
         for(entry in map){
+            Message.info("-----");
             var cmd = entry.key
             val cmdobj = entry.value
             var usages =  cmdobj.usage()
