@@ -11,4 +11,10 @@ public interface DevTool {
      * @throws IOException
      */
     void devJar(String javaClassPath,String targetPath,String mainClass) throws IOException;
+
+    /**
+     * 运行命令
+     * @param command
+     */
+    void runCommand(String command);
 }

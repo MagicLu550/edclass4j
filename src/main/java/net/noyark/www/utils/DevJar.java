@@ -85,4 +85,9 @@ public class DevJar implements DevTool {
                 in.close();
         }
     }
+
+    @Override
+    public void runCommand(String command) {
+        JarEncode.runCommand(command.split(" "));
+    }
 }
