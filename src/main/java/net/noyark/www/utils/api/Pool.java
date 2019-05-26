@@ -18,7 +18,7 @@ public class Pool {
 
     private static DevJar devJar;
 
-    public static DB_CONNECT getConnector() {
+    public static Connector getConnector() {
         return connector;
     }
 
