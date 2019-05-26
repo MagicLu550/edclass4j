@@ -39,38 +39,42 @@ public class DecodeJar {
 
     public Class<?> getMainClass(){
         try{
-            URL url = jarFile.toURI().toURL();
-            URLClassLoader urlClassLoader = new URLClassLoader(new URL[]{url},this.getClass().getClassLoader());
-
-            InputStream in = urlClassLoader.getResourceAsStream("META-INF/MANIFEST.MF");
-            if(in == null){
+            JarFile jarFile = new JarFile(this.jarFile);
+            Enumeration<JarEntry> entries = jarFile.entries();
+            InputStream MF_STREAM = null;
+            while (entries.hasMoreElements()){
+                JarEntry jar = entries.nextElement();
+                if(jar.getRealName().equals("META-INF/MANIFEST.MF")){
+                    MF_STREAM = jarFile.getInputStream(jar);
+                }
+            }
+            if(MF_STREAM == null){
                 throw new JarException("这个jar文件无法被运行，由于它没有MANIFEST.MF");
             }else{
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(MF_STREAM));
                 String line;
                 String main_class = null;
-                while ((line = reader.readLine())!=null){
-                    if(line.startsWith("Main-Class")){
+                while ((line = reader.readLine())!=null) {
+                    if (line.startsWith("Main-Class")) {
                         String[] entry = line.split(":");
                         main_class = entry[1].trim();
+                        break;
                     }
                 }
-                if(main_class == null){
+                if(main_class!=null){
+                    URLClassLoader loader = new URLClassLoader(new URL[]{this.jarFile.toURI().toURL()});
+                    InputStream main = loader.getResourceAsStream(main_class.replace(".","/"));
+                    Enumeration<JarEntry> mainGets = jarFile.entries();
+                    while (mainGets.hasMoreElements()){
+                        JarEntry entry = mainGets.nextElement();
+                        if(entry.getRealName().replaceAll("/|\\\\",".").equals(main_class+".class")){
+                            DecryptStart start = new DecryptStart(Util.readKey(keyFile),main,entry.getSize());
+                            return start.loadClass(main_class);
+                        }
+                    }
+                }else{
                     return null;
                 }
-                JarFile jarFile = new JarFile(this.jarFile);
-                Enumeration<JarEntry> entries = jarFile.entries();
-                long len = 0;
-                String path = main_class.replace(".","/");
-                while (entries.hasMoreElements()){
-                    JarEntry jar = entries.nextElement();
-                    if(jar.getRealName().equals(path+".class")) {
-                        len = jar.getSize();
-                    }
-                }
-                InputStream main = urlClassLoader.getResourceAsStream(path);
-                DecryptStart start = new DecryptStart(Util.readKey(keyFile),main,len);
-                return start.loadClass(main_class);
             }
         }catch (Exception e){
             e.printStackTrace();

@@ -37,6 +37,7 @@ public class JarEncode {
 
     public static Map<String, CommandBase> commandBaseMap;
 
+
     static {
         commandBaseMap = new HashMap<>();
         connector = Pool.getConnector();
@@ -47,8 +48,12 @@ public class JarEncode {
     }
 
     public static void main(String[] args){
-        Message.info("启动PluginEmpowerSystem服务");
-        new Thread(new CommandThread()).start();
+        if(args.length != 0){
+            runCommand(args,"");
+        }else{
+            Message.info("启动PluginEmpowerSystem服务");
+            new Thread(new CommandThread()).start();
+        }
     }
 
     public static void registerCommand(){
@@ -78,6 +83,7 @@ public class JarEncode {
         commandBaseMap.put("help",new Help(new HashMap<>(commandBaseMap)));
     }
 
+
     public static class CommandThread implements Runnable{
         @Override
         public void run() {
@@ -85,34 +91,7 @@ public class JarEncode {
                 try{
                     String cmd = Message.cmd();
                     String[] args = cmd.split(" ");
-                    if(args[0].startsWith("$")){
-                        String[] right_left = cmd.split("=");
-                        String value = right_left[1];
-                        Set<Map.Entry<String,CommandBase>> set = commandBaseMap.entrySet();
-                        //变量指令只支持jarin keyfile的
-                        value = value
-                                .replace("{jarin}",commandBaseMap.get("jarin").execute(new String[]{}).toString())
-                                .replace("{keyfile}",commandBaseMap.get("keyfile").execute(new String[]{}).toString())
-                                .replace("{gclass}",commandBaseMap.get("gclass").execute(new String[]{}).toString());
-
-                        vars.put(right_left[0].replace("$",""),value);
-                    }else{
-                        String[] alls = new String[args.length-1];
-                        System.arraycopy(args,1,alls,0,alls.length);
-                        Set<Map.Entry<String,String>> set = vars.entrySet();
-                        for(int i =0;i<alls.length;i++){
-                            for(Map.Entry<String,String> entry:set) {
-                                alls[i] = alls[i].replace("${"+entry.getKey()+"}",entry.getValue());
-                            }
-                        }
-                        CommandBase commandInstance = commandBaseMap.get(args[0]);
-                        if(commandInstance != null){
-                            Object o = commandInstance.execute(alls);
-                            Message.info(o==null?"null":o.toString());
-                        }else {
-                            Message.error("no such command");
-                        }
-                    }
+                    runCommand(args,cmd);
                 }catch (Exception e){
                     if (e instanceof ShutDownException){
                         Message.info("close");
@@ -121,6 +100,37 @@ public class JarEncode {
                     e.printStackTrace();
                     Message.error(e.getMessage());
                 }
+            }
+        }
+    }
+
+    public static void runCommand(String[] args,String cmd){
+        if(args[0].startsWith("$")){
+            String[] right_left = cmd.split("=");
+            String value = right_left[1];
+            Set<Map.Entry<String,CommandBase>> set = commandBaseMap.entrySet();
+            //变量指令只支持jarin keyfile的
+            value = value
+                    .replace("{jarin}",commandBaseMap.get("jarin").execute(new String[]{}).toString())
+                    .replace("{keyfile}",commandBaseMap.get("keyfile").execute(new String[]{}).toString())
+                    .replace("{gclass}",commandBaseMap.get("gclass").execute(new String[]{}).toString());
+
+            vars.put(right_left[0].replace("$",""),value);
+        }else{
+            String[] alls = new String[args.length-1];
+            System.arraycopy(args,1,alls,0,alls.length);
+            Set<Map.Entry<String,String>> set = vars.entrySet();
+            for(int i =0;i<alls.length;i++){
+                for(Map.Entry<String,String> entry:set) {
+                    alls[i] = alls[i].replace("${"+entry.getKey()+"}",entry.getValue());
+                }
+            }
+            CommandBase commandInstance = commandBaseMap.get(args[0]);
+            if(commandInstance != null){
+                Object o = commandInstance.execute(alls);
+                Message.info(o==null?"null":o.toString());
+            }else {
+                Message.error("no such command");
             }
         }
     }

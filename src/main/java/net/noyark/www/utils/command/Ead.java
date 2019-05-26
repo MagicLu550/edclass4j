@@ -3,7 +3,6 @@ package net.noyark.www.utils.command;
 import net.noyark.www.utils.api.Pool;
 import net.noyark.www.utils.encode.Util;
 
-import java.io.IOException;
 
 /**
  * 加密并打包
