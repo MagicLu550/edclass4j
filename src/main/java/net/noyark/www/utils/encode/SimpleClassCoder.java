@@ -52,8 +52,13 @@ public class SimpleClassCoder implements ClassCoder {
 
     @Override
     public Class<?> getClassInJar(String jarFile, String classname, String keyFile) {
+        return getClassInJar(jarFile,classname,keyFile,null);
+    }
+
+    @Override
+    public Class<?> getClassInJar(String jarFile, String classname, String keyFile, ClassLoader loader) {
         try{
-            return new DecodeJar(jarFile,keyFile).getDecodeClass(classname);
+            return new DecodeJar(jarFile,keyFile).getDecodeClass(classname,loader);
         }catch (Exception e){
             return null;
         }

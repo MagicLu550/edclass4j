@@ -18,6 +18,8 @@ public interface ClassCoder {
 
     Class<?> getClassInJar(String jarFile,String classname,String keyFile);
 
+    Class<?> getClassInJar(String jarFile,String classname,String keyFile,ClassLoader loader);
+
 
     /** 设置读取classpath的路径，即包前面的根路径，如果不设置，默认为在项目资源文件 */
 
