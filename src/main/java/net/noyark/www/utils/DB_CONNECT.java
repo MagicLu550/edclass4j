@@ -1,7 +1,5 @@
 package net.noyark.www.utils;
 
-import net.noyark.www.utils.DBTypes;
-import net.noyark.www.utils.DBUtils;
 import net.noyark.www.utils.api.Connector;
 import net.noyark.www.utils.ex.DBConnectException;
 import net.noyark.www.utils.ex.ParseException;

@@ -5,6 +5,10 @@ import net.noyark.www.utils.Message;
 import java.io.*;
 import java.security.*;
 import java.lang.reflect.*;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 
@@ -20,13 +24,28 @@ public class DecryptStart extends ClassLoader
 {
     private Cipher cipher;
 
+    private InputStream in;
+
+    private long len;
 
     public DecryptStart(SecretKey key) throws GeneralSecurityException {
         String algorithm = "DES";
         SecureRandom sr = new SecureRandom();
-        Message.info("[DecryptStart: creating cipher]");
+        if(Util.getDecodeMessageOut()){
+            Message.info("[DecryptStart: creating cipher]");
+        }
         cipher = Cipher.getInstance(algorithm);
         cipher.init(Cipher.DECRYPT_MODE, key, sr);
+    }
+
+    public DecryptStart(SecretKey key,InputStream in,long len) throws GeneralSecurityException{
+        this(key);
+        this.in = in;
+        this.len = len;
+    }
+
+    public void setIn(InputStream in){
+        this.in = in;
     }
 
     /**
@@ -44,18 +63,13 @@ public class DecryptStart extends ClassLoader
         String realArgs[] = new String[args.length-2];
         System.arraycopy( args, 2, realArgs, 0, args.length-2 );
 
-        // 读取密匙
-        Message.info( "[DecryptStart: reading key]" );
-        byte rawKey[] = Util.readFile(keyFilename);
-        DESKeySpec dks = new DESKeySpec(rawKey);
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-        SecretKey key = keyFactory.generateSecret(dks);
-
         // 创建解密的ClassLoader
-        DecryptStart dr = new DecryptStart(key);
+        DecryptStart dr = new DecryptStart(Util.readKey(keyFilename));
 
         // 创建应用主类的一个实例，通过ClassLoader装入它
-        Message.info("[DecryptStart: loading "+appName+"]");
+        if(Util.getDecodeMessageOut()){
+            Message.info("[DecryptStart: loading "+appName+"]");
+        }
 
         Class clasz = dr.loadClass(appName.replaceAll("/|\\\\","."));
 
@@ -99,13 +113,20 @@ public class DecryptStart extends ClassLoader
             try{
                 String filename = Util.getClassPath(name);
                 //读取经过加密的类文件
-                byte classData[] = Util.readFile(filename+".class");
+                byte classData[];
+                if(in ==null){
+                    classData = Util.readFile(filename+".class");
+                }else{
+                    classData = Util.readFile(in,len);
+                }
                 if(classData != null){
                     byte decryptedClassData[] = cipher.doFinal(classData);  //解密
                     clasz = defineClass( name, decryptedClassData, 0, decryptedClassData.length); // 再把它转换成一个类
-                    Message.info( "[DecryptStart: decrypting class "+name+"]");
+                    if(Util.getDecodeMessageOut()) {
+                        Message.info("[DecryptStart: decrypting class " + name + "]");
+                    }
                 }
-            }catch(FileNotFoundException fnfe){
+            }catch(FileNotFoundException e){
             }
 
             // 必需的步骤2：如果上面没有成功
@@ -116,15 +137,12 @@ public class DecryptStart extends ClassLoader
             // 必需的步骤3：如有必要，则装入相关的类
             if (resolve && clasz != null)
                 resolveClass(clasz);
-
             return clasz;//把类返回给调用者
 
-        } catch(IOException ie) {
-            throw new ClassNotFoundException(ie.toString());
-        } catch(GeneralSecurityException gse) {
-            throw new ClassNotFoundException( gse.toString());
+        }catch (Exception e){
+            e.printStackTrace();
         }
+        return null;
     }
-
 
 }

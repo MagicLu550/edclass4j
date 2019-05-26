@@ -73,16 +73,19 @@ public class JarEncode {
         commandBaseMap.put("echo",new Echo());
         commandBaseMap.put("dev",new Dev());//jar
         commandBaseMap.put("gclass",new Gclass());//get classes
+        commandBaseMap.put("jar",new Jar());
+        commandBaseMap.put("ead",new Ead());
         commandBaseMap.put("help",new Help(new HashMap<>(commandBaseMap)));
     }
 
     public static class CommandThread implements Runnable{
         @Override
         public void run() {
-            try{
-                while(true){
+            while(true){
+                try{
                     String cmd = Message.cmd();
-                    if(cmd.startsWith("$")){
+                    String[] args = cmd.split(" ");
+                    if(args[0].startsWith("$")){
                         String[] right_left = cmd.split("=");
                         String value = right_left[1];
                         Set<Map.Entry<String,CommandBase>> set = commandBaseMap.entrySet();
@@ -94,15 +97,15 @@ public class JarEncode {
 
                         vars.put(right_left[0].replace("$",""),value);
                     }else{
-                        String arg = Message.input();
-                        String[] alls = arg.trim().split(" ");
+                        String[] alls = new String[args.length-1];
+                        System.arraycopy(args,1,alls,0,alls.length);
                         Set<Map.Entry<String,String>> set = vars.entrySet();
                         for(int i =0;i<alls.length;i++){
                             for(Map.Entry<String,String> entry:set) {
                                 alls[i] = alls[i].replace("${"+entry.getKey()+"}",entry.getValue());
                             }
                         }
-                        CommandBase commandInstance = commandBaseMap.get(cmd);
+                        CommandBase commandInstance = commandBaseMap.get(args[0]);
                         if(commandInstance != null){
                             Object o = commandInstance.execute(alls);
                             Message.info(o==null?"null":o.toString());
@@ -110,9 +113,14 @@ public class JarEncode {
                             Message.error("no such command");
                         }
                     }
+                }catch (Exception e){
+                    if (e instanceof ShutDownException){
+                        Message.info("close");
+                        System.exit(0);
+                    }
+                    e.printStackTrace();
+                    Message.error(e.getMessage());
                 }
-            }catch (ShutDownException e){
-                Message.info("closed");
             }
         }
     }

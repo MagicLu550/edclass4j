@@ -1,8 +1,13 @@
 package net.noyark.www.utils.encode;
 
 
+import net.noyark.www.utils.Message;
+
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
 import java.io.*;
-import java.util.Properties;
+import java.util.*;
 
 public class Util
 {
@@ -11,13 +16,16 @@ public class Util
     static public byte[] readFile(String filename) throws IOException {
         File file = new File(filename);
         long len = file.length();
-        byte data[] = new byte[(int)len];
-        FileInputStream fin = new FileInputStream(file);
-        int r = fin.read(data);
-        if (r != len)
-            throw new IOException("Only read "+r+" of "+len+" for "+file);
-        fin.close();
-        return data;
+        return readFile(new FileInputStream(file),len);
+    }
+
+    static public byte[] readFile(InputStream in,long len) throws IOException{
+
+        byte[] bytes = new byte[(int)len];
+        in.read(bytes);
+        in.close();
+        return bytes;
+
     }
 
     // 把byte数组写出到文件
@@ -84,16 +92,11 @@ public class Util
         return filename;
     }
 
+
     public static String getClassOut(){
         try{
-            InputStream in;
-            if(readApplication == null){
-                in = new FileInputStream(getJarInFIle()+"/application.properties");
-            }else{
-                in = readApplication;
-            }
             Properties properties = new Properties();
-            properties.load(in);
+            properties.load(getInputStreamOfApplication());
             String to = properties.getProperty("encode.to");
             if(to.equals("this")){
                 return "THIS:在当前的class文件所在地，会被覆盖";
@@ -106,4 +109,39 @@ public class Util
         }
         return null;
     }
+
+    public static InputStream getInputStreamOfApplication() throws IOException{
+        InputStream in;
+        if(readApplication == null){
+            in = new FileInputStream(getJarInFIle()+"/application.properties");
+        }else{
+            in = readApplication;
+        }
+        return in;
+    }
+
+    public static boolean getDecodeMessageOut(){
+        try{
+            InputStream in =getInputStreamOfApplication();
+            Properties properties = new Properties();
+            properties.load(in);
+            return Boolean.parseBoolean(properties.getProperty("decode.message"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static SecretKey readKey(String keyFilename) throws Exception{
+        // 读取密匙
+        if(Util.getDecodeMessageOut()) {
+            Message.info("[DecryptStart: reading key]");
+        }
+        byte rawKey[] = Util.readFile(keyFilename);
+        DESKeySpec dks = new DESKeySpec(rawKey);
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+        return keyFactory.generateSecret(dks);
+    }
+
+
 }

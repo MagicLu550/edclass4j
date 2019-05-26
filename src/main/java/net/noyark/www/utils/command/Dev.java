@@ -22,8 +22,10 @@ public class Dev implements CommandBase {
                 if(args.length==3){
                     //-m target main
                     tool.devJar(Util.getClassPath(""),args[1],args[2]);
-                }else{
+                }else if(args.length==4){
                     tool.devJar(args[1],args[2],args[3]);
+                }else{
+                    return "打包失败";
                 }
             }else{
                 if(args.length==1){

@@ -3,7 +3,6 @@ package net.noyark.www.utils.api;
 
 import java.io.File;
 import java.util.List;
-
 public interface ClassCoder {
 
     void encode(String fileName,String... classname);

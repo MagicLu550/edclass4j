@@ -1,17 +1,29 @@
 package net.noyark.www.utils;
 
-import org.fusesource.jansi.Ansi;
 
-import java.util.Scanner;
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 
-import static org.fusesource.jansi.Ansi.ansi;
+import java.io.IOException;
+
 
 public class Message {
+    private static LineReader lineReader;
     static {
-        scanner = new Scanner(System.in);
+        try{
+            Terminal terminal = TerminalBuilder.builder()
+                    .system(true)
+                    .build();
+            lineReader = LineReaderBuilder.builder()
+                    .terminal(terminal)
+                    .build();
+        }catch (IOException e){
+
+        }
     }
 
-    private static Scanner scanner;
 
     public static void info(String msg){
 
@@ -22,12 +34,7 @@ public class Message {
         System.out.println("[ERROR ]"+msg);
     }
 
-    public static String input(){
-        return scanner.nextLine();
-    }
-
     public static String cmd(){
-        System.out.print(">");
-        return scanner.next();
+        return lineReader.readLine(">");
     }
 }

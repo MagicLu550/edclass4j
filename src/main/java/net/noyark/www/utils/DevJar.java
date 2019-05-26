@@ -18,9 +18,6 @@ import java.util.jar.Manifest;
 
 public class DevJar implements DevTool {
 
-
-
-
     public void devJar(String javaClassPath,String targetPath,String mainClass) throws IOException{
         Message.info("creating the jar file");
         targetPath = Util.getJarInFIle()+"/"+targetPath;
@@ -47,8 +44,6 @@ public class DevJar implements DevTool {
         target.close();
         Message.info("success");
     }
-
-
 
 
     private void writeClassFile(File source, JarOutputStream target, String javaClassPath) throws IOException {
