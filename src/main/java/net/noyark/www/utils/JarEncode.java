@@ -49,7 +49,7 @@ public class JarEncode {
 
     public static void main(String[] args){
         if(args.length != 0){
-            runCommand(args,"");
+            runCommand(args);
         }else{
             Message.info("启动PluginEmpowerSystem服务");
             new Thread(new CommandThread()).start();
@@ -91,7 +91,7 @@ public class JarEncode {
                 try{
                     String cmd = Message.cmd();
                     String[] args = cmd.split(" ");
-                    runCommand(args,cmd);
+                    runCommand(args);
                 }catch (Exception e){
                     if (e instanceof ShutDownException){
                         Message.info("close");
@@ -104,9 +104,9 @@ public class JarEncode {
         }
     }
 
-    public static void runCommand(String[] args,String cmd){
+    public static void runCommand(String[] args){
         if(args[0].startsWith("$")){
-            String[] right_left = cmd.split("=");
+            String[] right_left = args[0].split("=");
             String value = right_left[1];
             Set<Map.Entry<String,CommandBase>> set = commandBaseMap.entrySet();
             //变量指令只支持jarin keyfile的
