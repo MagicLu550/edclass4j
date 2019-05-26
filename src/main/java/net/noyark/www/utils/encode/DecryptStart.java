@@ -29,6 +29,14 @@ public class DecryptStart extends ClassLoader
     private long len;
 
     public DecryptStart(SecretKey key) throws GeneralSecurityException {
+       setKey(key);
+    }
+    public DecryptStart(SecretKey key,ClassLoader parent) throws GeneralSecurityException{
+        super(parent);
+        setKey(key);
+    }
+
+    public void setKey(SecretKey key) throws GeneralSecurityException{
         String algorithm = "DES";
         SecureRandom sr = new SecureRandom();
         if(Util.getDecodeMessageOut()){
@@ -39,8 +47,15 @@ public class DecryptStart extends ClassLoader
     }
 
     public DecryptStart(SecretKey key,InputStream in,long len) throws GeneralSecurityException{
-        this(key);
-        this.in = in;
+        setKey(key);
+        setIn(in);
+        this.len = len;
+    }
+
+    public DecryptStart(SecretKey key,InputStream in,long len,ClassLoader parent) throws GeneralSecurityException{
+        super(parent);
+        setKey(key);
+        setIn(in);
         this.len = len;
     }
 

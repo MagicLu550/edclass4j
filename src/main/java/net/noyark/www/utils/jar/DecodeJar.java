@@ -77,6 +77,10 @@ public class DecodeJar {
     }
 
     public Class<?> getDecodeClass(String main_class) throws Exception{
+        return getDecodeClass(main_class,null);
+    }
+
+    public Class<?> getDecodeClass(String main_class,ClassLoader parent) throws Exception{
         JarFile jarFile = new JarFile(this.jarFile);
         URLClassLoader loader = new URLClassLoader(new URL[]{this.jarFile.toURI().toURL()});
         InputStream main = loader.getResourceAsStream(main_class.replace(".","/"));
@@ -84,8 +88,13 @@ public class DecodeJar {
         while (mainGets.hasNext()){
             JarEntry entry = mainGets.next();
             if(entry.getName().replaceAll("/|\\\\",".").equals(main_class+".class")){
-                DecryptStart start = new DecryptStart(Util.readKey(keyFile),main,entry.getSize());
-                return start.loadClass(main_class);
+                if(parent== null){
+                    DecryptStart start = new DecryptStart(Util.readKey(keyFile),main,entry.getSize());
+                    return start.loadClass(main_class);
+                }else{
+                    DecryptStart start = new DecryptStart(Util.readKey(keyFile),main,entry.getSize(),parent);
+                    return start.loadClass(main_class);
+                }
             }
         }
         return null;
