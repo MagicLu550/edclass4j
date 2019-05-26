@@ -4,6 +4,7 @@ import net.noyark.www.utils.Message;
 import net.noyark.www.utils.ReflectSet;
 import net.noyark.www.utils.api.ClassCoder;
 import net.noyark.www.utils.ex.ParseException;
+import net.noyark.www.utils.jar.DecodeJar;
 
 import java.io.File;
 import java.util.List;
@@ -49,7 +50,14 @@ public class SimpleClassCoder implements ClassCoder {
         return ReflectSet.getReflectSet().load(this,keyFile,true,mainClass);
     }
 
-
+    @Override
+    public Class<?> getClassInJar(String jarFile, String classname, String keyFile) {
+        try{
+            return new DecodeJar(jarFile,keyFile).getDecodeClass(classname);
+        }catch (Exception e){
+            return null;
+        }
+    }
 
     /** 设置读取classpath的路径，即包前面的根路径，如果不设置，默认为在项目资源文件 */
 

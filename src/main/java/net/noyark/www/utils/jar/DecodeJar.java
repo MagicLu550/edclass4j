@@ -65,22 +65,28 @@ public class DecodeJar {
                     }
                 }
                 if(main_class!=null){
-                    URLClassLoader loader = new URLClassLoader(new URL[]{this.jarFile.toURI().toURL()});
-                    InputStream main = loader.getResourceAsStream(main_class.replace(".","/"));
-                    Iterator<JarEntry> mainGets = jarFile.stream().iterator();
-                    while (mainGets.hasNext()){
-                        JarEntry entry = mainGets.next();
-                        if(entry.getName().replaceAll("/|\\\\",".").equals(main_class+".class")){
-                            DecryptStart start = new DecryptStart(Util.readKey(keyFile),main,entry.getSize());
-                            return start.loadClass(main_class);
-                        }
-                    }
+                    return getDecodeClass(main_class);
                 }else{
                     return null;
                 }
             }
         }catch (Exception e){
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Class<?> getDecodeClass(String main_class) throws Exception{
+        JarFile jarFile = new JarFile(this.jarFile);
+        URLClassLoader loader = new URLClassLoader(new URL[]{this.jarFile.toURI().toURL()});
+        InputStream main = loader.getResourceAsStream(main_class.replace(".","/"));
+        Iterator<JarEntry> mainGets = jarFile.stream().iterator();
+        while (mainGets.hasNext()){
+            JarEntry entry = mainGets.next();
+            if(entry.getName().replaceAll("/|\\\\",".").equals(main_class+".class")){
+                DecryptStart start = new DecryptStart(Util.readKey(keyFile),main,entry.getSize());
+                return start.loadClass(main_class);
+            }
         }
         return null;
     }
