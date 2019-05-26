@@ -18,9 +18,9 @@ public class Jar implements CommandBase {
             jar.runJar(realArgs);
         }catch (Exception e){
             e.printStackTrace();
-            return "出现不可预知的错误";
+            return "Process finished with exit code -1";
         }
-        return "success";
+        return "Process finished with exit code 0";
     }
 
     @Override

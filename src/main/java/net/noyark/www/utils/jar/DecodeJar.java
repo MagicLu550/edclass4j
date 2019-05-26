@@ -9,9 +9,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.jar.JarEntry;
 import java.util.jar.JarException;
 import java.util.jar.JarFile;
+import java.util.stream.Stream;
 
 /**
  * 将加密的jar包运行
@@ -40,12 +42,13 @@ public class DecodeJar {
     public Class<?> getMainClass(){
         try{
             JarFile jarFile = new JarFile(this.jarFile);
-            Enumeration<JarEntry> entries = jarFile.entries();
+            Iterator<JarEntry> entries = jarFile.stream().iterator();
             InputStream MF_STREAM = null;
-            while (entries.hasMoreElements()){
-                JarEntry jar = entries.nextElement();
-                if(jar.getRealName().equals("META-INF/MANIFEST.MF")){
+            while (entries.hasNext()){
+                JarEntry jar = entries.next();
+                if("META-INF/MANIFEST.MF".equals(jar.getName())){
                     MF_STREAM = jarFile.getInputStream(jar);
+                    break;
                 }
             }
             if(MF_STREAM == null){
@@ -64,10 +67,10 @@ public class DecodeJar {
                 if(main_class!=null){
                     URLClassLoader loader = new URLClassLoader(new URL[]{this.jarFile.toURI().toURL()});
                     InputStream main = loader.getResourceAsStream(main_class.replace(".","/"));
-                    Enumeration<JarEntry> mainGets = jarFile.entries();
-                    while (mainGets.hasMoreElements()){
-                        JarEntry entry = mainGets.nextElement();
-                        if(entry.getRealName().replaceAll("/|\\\\",".").equals(main_class+".class")){
+                    Iterator<JarEntry> mainGets = jarFile.stream().iterator();
+                    while (mainGets.hasNext()){
+                        JarEntry entry = mainGets.next();
+                        if(entry.getName().replaceAll("/|\\\\",".").equals(main_class+".class")){
                             DecryptStart start = new DecryptStart(Util.readKey(keyFile),main,entry.getSize());
                             return start.loadClass(main_class);
                         }
