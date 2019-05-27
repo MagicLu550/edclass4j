@@ -83,7 +83,11 @@ public class DecodeJar {
     public Class<?> getDecodeClass(String main_class,ClassLoader parent) throws Exception{
         JarFile jarFile = new JarFile(this.jarFile);
         URLClassLoader loader = new URLClassLoader(new URL[]{this.jarFile.toURI().toURL()});
-        InputStream main = loader.getResourceAsStream(main_class.replace(".","/"));
+        String classname = main_class.replace(".","/");
+        if(!classname.endsWith(".class")){
+            classname = classname+".class";
+        }
+        InputStream main = loader.getResourceAsStream(classname);
         Iterator<JarEntry> mainGets = jarFile.stream().iterator();
         while (mainGets.hasNext()){
             JarEntry entry = mainGets.next();
