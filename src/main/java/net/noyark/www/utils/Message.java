@@ -1,24 +1,18 @@
 package net.noyark.www.utils;
 
 
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
-import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
-
+import jline.console.ConsoleReader;
 import java.io.IOException;
 
 
 public class Message {
-    private static LineReader lineReader;
+    private static ConsoleReader lineReader;
+
+
     static {
         try{
-            Terminal terminal = TerminalBuilder.builder()
-                    .system(true)
-                    .build();
-            lineReader = LineReaderBuilder.builder()
-                    .terminal(terminal)
-                    .build();
+            lineReader = new ConsoleReader();
+            lineReader.addCompleter(new SimpleLine());
         }catch (IOException e){
 
         }
@@ -35,6 +29,10 @@ public class Message {
     }
 
     public static String cmd(){
-        return lineReader.readLine(">");
+        try{
+            return lineReader.readLine(">");
+        }catch (IOException e){
+            throw new RuntimeException("输入异常",e);
+        }
     }
 }

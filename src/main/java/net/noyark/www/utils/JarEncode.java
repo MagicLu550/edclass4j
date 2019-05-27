@@ -35,7 +35,7 @@ public class JarEncode {
 
     private static Connector connector;
 
-    public static Map<String, CommandBase> commandBaseMap;
+    public static final Map<String, CommandBase> commandBaseMap;
 
 
     static {
