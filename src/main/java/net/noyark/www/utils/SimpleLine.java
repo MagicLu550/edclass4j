@@ -1,10 +1,8 @@
 package net.noyark.www.utils;
 
 import jline.console.completer.Completer;
-import net.noyark.www.utils.command.CommandBase;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
