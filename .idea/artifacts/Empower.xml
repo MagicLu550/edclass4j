@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="Empower">
-    <output-path>$PROJECT_DIR$/out/artifacts/Empower</output-path>
+    <output-path>$PROJECT_DIR$/../../PluginEmpowerSystem/out/artifacts/Empower</output-path>
     <root id="archive" name="Empower.jar">
       <element id="module-output" name="PluginEmpowerSystem" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-io/commons-io/2.6/commons-io-2.6.jar" path-in-jar="/" />

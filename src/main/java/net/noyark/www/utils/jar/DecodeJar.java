@@ -13,8 +13,6 @@ import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarException;
 import java.util.jar.JarFile;
-import java.util.stream.Stream;
-
 /**
  * 将加密的jar包运行
  */
