@@ -8,7 +8,6 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
