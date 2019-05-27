@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarException;
 import java.util.jar.JarFile;
@@ -54,16 +55,7 @@ public class DecodeJar {
             if(MF_STREAM == null){
                 throw new JarException("这个jar文件无法被运行，由于它没有MANIFEST.MF");
             }else{
-                BufferedReader reader = new BufferedReader(new InputStreamReader(MF_STREAM));
-                String line;
-                String main_class = null;
-                while ((line = reader.readLine())!=null) {
-                    if (line.startsWith("Main-Class")) {
-                        String[] entry = line.split(":");
-                        main_class = entry[1].trim();
-                        break;
-                    }
-                }
+                String main_class = jarFile.getManifest().getMainAttributes().get(Attributes.Name.MAIN_CLASS).toString();
                 if(main_class!=null){
                     return getDecodeClass(main_class);
                 }else{
