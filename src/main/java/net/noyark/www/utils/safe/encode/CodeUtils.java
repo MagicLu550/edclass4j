@@ -38,21 +38,6 @@ public class CodeUtils {
      */
     private static final String ALGORITHMSTR = "AES/ECB/PKCS5Padding";
 
-    public static void main(String[] args) throws Exception {
-        byte[] content = "url：findNames你好.action".getBytes();
-        System.out.println("加密前：" + new String(content));
-
-        String key =randomKey("hello.key");
-
-        System.out.println("加密密钥和解密密钥：" + key);
-        System.out.println();
-        byte[] encrypt = aesEncrypt(content, readKey("hello.key"));
-        System.out.println("加密后：" + new String(encrypt));
-
-        byte[] decrypt = aesDecrypt(encrypt, readKey("hello.key"));
-
-        System.out.println("解密后：" + new String(decrypt));
-    }
 
     /**
      * base 64 encode
