@@ -1,35 +1,44 @@
 package net.noyark.www.utils.api;
 
 
+import net.noyark.www.utils.CodeReflectSet;
+import net.noyark.www.utils.Coder;
+import net.noyark.www.utils.encode.Util;
+
 import java.io.File;
 import java.util.List;
-public interface ClassCoder {
-
-    void encode(String fileName,String... classname);
-
-    Class<?> decode(String keyFile,String classname,boolean executeMain);
-    //不执行main
-    Class<?> decode(String keyFile,String classname);
-    //加密整个class系统
-    List<Class<?>> recursiveEncode(String mainClass, String keyFile);
-    //加密整个class系统
-    List<Class<?>> recursiveDecode(String mainClass,String keyFile);
-
-
-    Class<?> getClassInJar(String jarFile,String classname,String keyFile);
-
-    Class<?> getClassInJar(String jarFile,String classname,String keyFile,ClassLoader loader);
-
+public abstract class ClassCoder implements Coder {
 
     /** 设置读取classpath的路径，即包前面的根路径，如果不设置，默认为在项目资源文件 */
 
-    void setApplicationFile(String file);
+    public void setApplicationFile(String file){
+        Util.setReadApplication(file);
+    }
     /** 获取class文件输出路径，如果为this，则是覆盖现行的路径 */
-    String  getClassOut();
+    public String  getClassOut(){
+        return Util.getClassOut();
+    }
     /** 获取application classpath，以你定义的application.properties内容为准*/
-    String getClassPath(String name);
+    public String getClassPath(String name){
+        return Util.getClassPath(name);
+    }
     /** 获取keyfile文件夹所在的绝对路径 */
-    File getKeyFile();
+    public File getKeyFile(){
+        return Util.getKeyFile();
+    }
     /** 获取jar包所在路径 */
-    File jarInFile();
+    public File jarInFile(){
+        return Util.getJarInFIle();
+    }
+
+    //加密整个class系统
+    public List<Class<?>> recursiveEncode(String mainClass,String keyFile){
+        return CodeReflectSet.getDESReflectSet().load(this,keyFile,false,mainClass);
+    }
+    //加密整个class系统
+    public List<Class<?>> recursiveDecode(String mainClass,String keyFile){
+        return CodeReflectSet.getDESReflectSet().load(this,keyFile,true,mainClass);
+    }
+
+
 }

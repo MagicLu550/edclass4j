@@ -3,9 +3,11 @@ package net.noyark.www.utils.jar;
 import net.noyark.www.utils.Message;
 import net.noyark.www.utils.encode.DecryptStart;
 import net.noyark.www.utils.encode.Util;
+import net.noyark.www.utils.safe.encode.SafeClassLoader;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Iterator;
@@ -23,9 +25,12 @@ public class DecodeJar {
 
     private String keyFile;
 
-    public DecodeJar(String jarFileName,String keyFile) {
+    private String decodeMethod;//AES/DES
+
+    public DecodeJar(String jarFileName,String keyFile,String decodeMethod) {
         this.jarFile = new File(jarFileName);
         this.keyFile = keyFile;
+        this.decodeMethod = decodeMethod;
     }
 
     public void runJar(String[] args) throws IllegalAccessException,NoSuchMethodException, InvocationTargetException {
@@ -69,27 +74,47 @@ public class DecodeJar {
         return getDecodeClass(main_class,null);
     }
 
+    //DES或者AES
     public Class<?> getDecodeClass(String main_class,ClassLoader parent) throws Exception{
         JarFile jarFile = new JarFile(this.jarFile);
-        URLClassLoader loader = new URLClassLoader(new URL[]{this.jarFile.toURI().toURL()});
-        String classname = main_class.replace(".","/");
-        if(!classname.endsWith(".class")){
-            classname = classname+".class";
-        }
-        InputStream main = loader.getResourceAsStream(classname);
         Iterator<JarEntry> mainGets = jarFile.stream().iterator();
         while (mainGets.hasNext()){
             JarEntry entry = mainGets.next();
             if(entry.getName().replaceAll("/|\\\\",".").equals(main_class+".class")){
                 if(parent== null){
-                    DecryptStart start = new DecryptStart(Util.readKey(keyFile),main,entry.getSize());
+                    ClassLoader start = createDeClassLoader(decodeMethod,keyFile,getMainInputStream(main_class),entry.getSize());
                     return start.loadClass(main_class);
                 }else{
-                    DecryptStart start = new DecryptStart(Util.readKey(keyFile),main,entry.getSize(),parent);
+                    ClassLoader start = createDeClassLoader(decodeMethod,keyFile,getMainInputStream(main_class),entry.getSize(),parent);
                     return start.loadClass(main_class);
                 }
             }
         }
         return null;
+    }
+
+    public InputStream getMainInputStream(String main_class) throws MalformedURLException {
+        URLClassLoader loader = new URLClassLoader(new URL[]{this.jarFile.toURI().toURL()});
+        String classname = main_class.replace(".","/");
+        if(!classname.endsWith(".class")){
+            classname = classname+".class";
+        }
+        return loader.getResourceAsStream(classname);
+    }
+
+    public ClassLoader createDeClassLoader(String es,String keyFile,InputStream main,long size) throws Exception{
+        if(es.equals("DES")){
+            return new DecryptStart(Util.readKey(keyFile),main,size);
+        }else{
+            return new SafeClassLoader(keyFile,main,size);
+        }
+    }
+
+    public ClassLoader createDeClassLoader(String es,String keyFile,InputStream main,long size,ClassLoader loader) throws Exception{
+        if(es.equals("DES")){
+            return new DecryptStart(Util.readKey(keyFile),main,size,loader);
+        }else{
+            return new SafeClassLoader(keyFile,main,size,loader);
+        }
     }
 }

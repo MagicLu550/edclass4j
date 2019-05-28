@@ -2,6 +2,8 @@ package net.noyark.www.utils.encode;
 
 
 import net.noyark.www.utils.Message;
+import net.noyark.www.utils.Coder;
+import net.noyark.www.utils.jar.DecodeJar;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -35,13 +37,32 @@ public class Util
         fout.close();
     }
 
+    static public void writeFile(String fileName,String data) throws IOException{
+        PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName),"UTF-8")));
+        writer.println(data);
+        writer.close();
+    }
+
+    static public String readKeyFile(String fileName) throws IOException{
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName),"UTF-8"));
+        return reader.readLine();
+    }
+
+    static public void writeClassData(String filename,byte[] encryptedClassData) throws IOException{
+        String out = Util.getClassOut();
+        if(out.startsWith("THIS")) {
+            Util.writeFile(filename + ".class", encryptedClassData);  // 保存加密后的内容
+        }else{
+            Util.writeFile(out,encryptedClassData);
+        }
+    }
+
     /**
      * classpath:file
      * @param file
      */
     public static void setReadApplication(String file){
         try{
-            String in;
             if(file.startsWith("classpath:")){
                 readApplication = Util.class.getResourceAsStream(file.replace("classpath:",""));
             }else{
@@ -143,5 +164,19 @@ public class Util
         return keyFactory.generateSecret(dks);
     }
 
+
+    public static Class<?> getClassInJar(String jarFile, String classname, String keyFile, Coder.DecryptMethod method) {
+        return getClassInJar(jarFile,classname,keyFile,null,method);
+    }
+
+
+    public static Class<?> getClassInJar(String jarFile, String classname, String keyFile, ClassLoader loader, Coder.DecryptMethod method) {
+
+        try{
+            return new DecodeJar(jarFile,keyFile,method.getMethod()).getDecodeClass(classname,loader);
+        }catch (Exception e){
+            return null;
+        }
+    }
 
 }

@@ -11,12 +11,30 @@
 
 * key_file如果要指向keyfile文件夹，则需要变量指向
 
-######里面的指令
+###### 里面的指令
 
 输入`help`可以查询命令
 
-######建议
+###### 建议
 * 启动加密程序时，不建议在程序内部输入指令
+###### 默认的文件系统
+* keyfile文件夹
+* classes文件夹
+* application.properties
+```properties
+    
+
+    #now:默认为当前jar包所在位置,这个为classpath
+    # ,即class文件根目录
+    #classpath=now:classes
+    #指加密文件加密输出位置
+    #this为默认覆盖原来的文件
+    #encode.to=this
+    #在解密时是否输出信息
+    #建议关闭，否则会影响您的程序输出效果
+    #decode.message=false
+
+```
 ###### 其他小特性
 * 内置变量
     * ${jarin} 本jar包所在的文件夹路径

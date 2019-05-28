@@ -4,6 +4,7 @@ import net.noyark.www.utils.api.Connector;
 import net.noyark.www.utils.api.Pool;
 import net.noyark.www.utils.command.*;
 import net.noyark.www.utils.command.Random;
+import net.noyark.www.utils.command.newcommand.*;
 import net.noyark.www.utils.ex.ShutDownException;
 
 import java.util.*;
@@ -80,6 +81,12 @@ public class JarEncode {
         commandBaseMap.put("gclass",new Gclass());//get classes
         commandBaseMap.put("jar",new Jar());
         commandBaseMap.put("ead",new Ead());
+        commandBaseMap.put("ackey",new Ackey());
+        commandBaseMap.put("adc",new Adc());
+        commandBaseMap.put("adeclassall",new Adeclassall());
+        commandBaseMap.put("aec",new Aec());
+        commandBaseMap.put("aenclassall",new Aenclassall());
+        commandBaseMap.put("akeyec",new Akeyec());
         commandBaseMap.put("help",new Help(new HashMap<>(commandBaseMap)));
     }
 
