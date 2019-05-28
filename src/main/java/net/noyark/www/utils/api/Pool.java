@@ -12,7 +12,7 @@ public class Pool {
         devJar = new DevJar();
     }
 
-    private static DB_CONNECT connector;
+    private static Connector connector;
 
     private static SimpleClassCoder classCoder;
 
