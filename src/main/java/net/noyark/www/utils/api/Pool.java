@@ -14,7 +14,7 @@ public class Pool {
         safeSimpleCoder = new SafeClassCoder();
     }
 
-    private static DB_CONNECT connector;
+    private static Connector connector;
 
     private static SimpleClassCoder classCoder;
 
