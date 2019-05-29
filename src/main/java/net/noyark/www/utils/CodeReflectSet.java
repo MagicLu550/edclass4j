@@ -17,7 +17,6 @@ package net.noyark.www.utils;
 
 
 import net.noyark.www.utils.api.ClassCoder;
-import net.noyark.www.utils.encode.SimpleClassCoder;
 
 import java.io.IOException;
 import java.util.ArrayList;
